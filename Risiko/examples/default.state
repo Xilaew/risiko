@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <gamestate:State xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:gamestate="http://www.example.org/risiko/gamestate" turn="//@players.1" phase="setTroops" state="initialTroopDistribution">
   <players ownedCountries="//@countryState.0/@value //@countryState.1/@value //@countryState.2/@value" name="Ich">
-    <ownedCards href="default.board#//@cards.0"/>
+    <ownedCards href="http:///Risiko.board#//@cards.0"/>
   </players>
   <players ownedCountries="//@countryState.3/@value" name="Du"/>
   <countryState>
-    <key href="default.board#//@countries[name='Afghanistan']"/>
+    <key href="http:///Risiko.board#//@countries[name='Afghanistan']"/>
     <value player="//@players.0">
-      <country href="default.board#//@countries[name='Afghanistan']"/>
+      <country href="http:///Risiko.board#//@countries[name='Afghanistan']"/>
     </value>
   </countryState>
   <countryState>
-    <key href="default.board#//@countries[name='China']"/>
+    <key href="http:///Risiko.board#//@countries[name='China']"/>
     <value player="//@players.0">
-      <country href="default.board#//@countries[name='China']"/>
+      <country href="http:///Risiko.board#//@countries[name='China']"/>
     </value>
   </countryState>
   <countryState>
-    <key href="default.board#//@countries[name='Indien']"/>
+    <key href="http:///Risiko.board#//@countries[name='Indien']"/>
     <value player="//@players.0">
-      <country href="default.board#//@countries[name='Indien']"/>
+      <country href="http:///Risiko.board#//@countries[name='Indien']"/>
     </value>
   </countryState>
   <countryState>
-    <key href="default.board#//@countries[name='Indonesien']"/>
+    <key href="http:///Risiko.board#//@countries[name='Indonesien']"/>
     <value player="//@players.1">
-      <country href="default.board#//@countries[name='Indonesien']"/>
+      <country href="http:///Risiko.board#//@countries[name='Indonesien']"/>
     </value>
   </countryState>
 </gamestate:State>

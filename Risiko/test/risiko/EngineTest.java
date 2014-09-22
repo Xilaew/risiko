@@ -11,7 +11,10 @@ public class EngineTest {
 			IOException, RuntimeException {
 		Engine engine = new Engine();
 		File boardFile = new File("examples/default.board");
+		File stateFile = new File("examples/default.state");
 		engine.setBoard(new FileInputStream(boardFile));
 		engine.getBoard(System.out);
+		engine.setState(new FileInputStream(stateFile));
+		engine.getState(System.out);
 	}
 }
