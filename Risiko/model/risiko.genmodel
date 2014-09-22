@@ -8,8 +8,8 @@
     <nestedGenPackages prefix="board" basePackage="risiko" disposableProviderFactory="true"
         fileExtensions="board" ecorePackage="risiko.ecore#//board">
       <genEnums typeSafeEnumCompatible="false" ecoreEnum="risiko.ecore#//board/BorderType">
-        <genEnumLiterals ecoreEnumLiteral="risiko.ecore#//board/BorderType/SEA"/>
         <genEnumLiterals ecoreEnumLiteral="risiko.ecore#//board/BorderType/LAND"/>
+        <genEnumLiterals ecoreEnumLiteral="risiko.ecore#//board/BorderType/SEA"/>
       </genEnums>
       <genEnums typeSafeEnumCompatible="false" ecoreEnum="risiko.ecore#//board/CardSymbol">
         <genEnumLiterals ecoreEnumLiteral="risiko.ecore#//board/CardSymbol/Infanterie"/>
@@ -50,17 +50,34 @@
     </nestedGenPackages>
     <nestedGenPackages prefix="state" basePackage="risiko" disposableProviderFactory="true"
         fileExtensions="state" ecorePackage="risiko.ecore#//gamestate">
+      <genEnums typeSafeEnumCompatible="false" ecoreEnum="risiko.ecore#//gamestate/TurnPhase">
+        <genEnumLiterals ecoreEnumLiteral="risiko.ecore#//gamestate/TurnPhase/gainTroops"/>
+        <genEnumLiterals ecoreEnumLiteral="risiko.ecore#//gamestate/TurnPhase/setTroops"/>
+        <genEnumLiterals ecoreEnumLiteral="risiko.ecore#//gamestate/TurnPhase/fight"/>
+        <genEnumLiterals ecoreEnumLiteral="risiko.ecore#//gamestate/TurnPhase/moveTroops"/>
+      </genEnums>
+      <genEnums typeSafeEnumCompatible="false" ecoreEnum="risiko.ecore#//gamestate/GameState">
+        <genEnumLiterals ecoreEnumLiteral="risiko.ecore#//gamestate/GameState/acceptingPlayers"/>
+        <genEnumLiterals ecoreEnumLiteral="risiko.ecore#//gamestate/GameState/initialTroopDistribution"/>
+        <genEnumLiterals ecoreEnumLiteral="risiko.ecore#//gamestate/GameState/play"/>
+        <genEnumLiterals ecoreEnumLiteral="risiko.ecore#//gamestate/GameState/gameOver"/>
+      </genEnums>
       <genClasses ecoreClass="risiko.ecore#//gamestate/Player">
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference risiko.ecore#//gamestate/Player/ownedCountries"/>
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference risiko.ecore#//gamestate/Player/ownedCards"/>
-        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute risiko.ecore#//gamestate/Player/troopsToSet"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute risiko.ecore#//gamestate/Player/name"/>
       </genClasses>
       <genClasses ecoreClass="risiko.ecore#//gamestate/State">
         <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference risiko.ecore#//gamestate/State/players"/>
         <genFeatures children="true" createChild="true" propertySortChoices="true"
             ecoreFeature="ecore:EReference risiko.ecore#//gamestate/State/countryState"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference risiko.ecore#//gamestate/State/turn"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute risiko.ecore#//gamestate/State/phase"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute risiko.ecore#//gamestate/State/state"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute risiko.ecore#//gamestate/State/troopsToSet"/>
       </genClasses>
       <genClasses ecoreClass="risiko.ecore#//gamestate/CountryState">
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
@@ -92,9 +109,9 @@
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference risiko.ecore#//actions/CoinCards/cards"/>
       </genClasses>
-      <genClasses ecoreClass="risiko.ecore#//actions/Action">
+      <genClasses ecoreClass="risiko.ecore#//actions/InGameAction">
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
-            ecoreFeature="ecore:EReference risiko.ecore#//actions/Action/player"/>
+            ecoreFeature="ecore:EReference risiko.ecore#//actions/InGameAction/player"/>
       </genClasses>
       <genClasses ecoreClass="risiko.ecore#//actions/MoveTroops">
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
@@ -102,6 +119,15 @@
         <genFeatures notify="false" createChild="false" propertySortChoices="true"
             ecoreFeature="ecore:EReference risiko.ecore#//actions/MoveTroops/to"/>
         <genFeatures createChild="false" ecoreFeature="ecore:EAttribute risiko.ecore#//actions/MoveTroops/troops"/>
+      </genClasses>
+      <genClasses ecoreClass="risiko.ecore#//actions/AddPlayer">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference risiko.ecore#//actions/AddPlayer/players"/>
+      </genClasses>
+      <genClasses ecoreClass="risiko.ecore#//actions/StartGame"/>
+      <genClasses ecoreClass="risiko.ecore#//actions/Action"/>
+      <genClasses ecoreClass="risiko.ecore#//actions/RemovePlayer">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference risiko.ecore#//actions/RemovePlayer/players"/>
       </genClasses>
     </nestedGenPackages>
   </genPackages>

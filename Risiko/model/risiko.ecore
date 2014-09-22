@@ -29,8 +29,8 @@
           eType="#//board/BorderType" defaultValueLiteral="LAND"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EEnum" name="BorderType">
-      <eLiterals name="SEA"/>
       <eLiterals name="LAND"/>
+      <eLiterals name="SEA" value="1"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="Continent">
       <eStructuralFeatures xsi:type="ecore:EReference" name="country" lowerBound="1"
@@ -46,10 +46,10 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="country" eType="#//board/Country"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EEnum" name="CardSymbol">
-      <eLiterals name="Infanterie"/>
-      <eLiterals name="Kavallerie"/>
-      <eLiterals name="Artillerie"/>
-      <eLiterals name="Joker"/>
+      <eLiterals name="Infanterie" value="1"/>
+      <eLiterals name="Kavallerie" value="2"/>
+      <eLiterals name="Artillerie" value="3"/>
+      <eLiterals name="Joker" value="-1"/>
     </eClassifiers>
   </eSubpackages>
   <eSubpackages name="gamestate" nsURI="http://www.example.org/risiko/gamestate" nsPrefix="gamestate">
@@ -58,14 +58,20 @@
           eType="#//gamestate/CountryState" eOpposite="#//gamestate/CountryState/player"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="ownedCards" upperBound="-1"
           eType="#//board/Card"/>
-      <eStructuralFeatures xsi:type="ecore:EAttribute" name="troopsToSet" lowerBound="1"
-          eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="State">
       <eStructuralFeatures xsi:type="ecore:EReference" name="players" lowerBound="1"
           upperBound="-1" eType="#//gamestate/Player" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="countryState" lowerBound="1"
           upperBound="-1" eType="#//gamestate/CountryToCountryStateMap" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="turn" eType="#//gamestate/Player"
+          resolveProxies="false"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="phase" eType="#//gamestate/TurnPhase"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="state" lowerBound="1"
+          eType="#//gamestate/GameState"/>
+      <eStructuralFeatures xsi:type="ecore:EAttribute" name="troopsToSet" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"
+          defaultValueLiteral="1"/>
     </eClassifiers>
     <eClassifiers xsi:type="ecore:EClass" name="CountryState">
       <eStructuralFeatures xsi:type="ecore:EReference" name="player" lowerBound="1"
@@ -80,9 +86,21 @@
       <eStructuralFeatures xsi:type="ecore:EReference" name="value" lowerBound="1"
           eType="#//gamestate/CountryState" containment="true"/>
     </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="TurnPhase">
+      <eLiterals name="gainTroops" literal=""/>
+      <eLiterals name="setTroops" value="1"/>
+      <eLiterals name="fight" value="2"/>
+      <eLiterals name="moveTroops" value="3"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EEnum" name="GameState">
+      <eLiterals name="acceptingPlayers"/>
+      <eLiterals name="initialTroopDistribution"/>
+      <eLiterals name="play"/>
+      <eLiterals name="gameOver"/>
+    </eClassifiers>
   </eSubpackages>
   <eSubpackages name="actions" nsURI="http://www.example.org/risiko/actions" nsPrefix="actions">
-    <eClassifiers xsi:type="ecore:EClass" name="Atack" eSuperTypes="#//actions/Action">
+    <eClassifiers xsi:type="ecore:EClass" name="Atack" eSuperTypes="#//actions/InGameAction">
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="troops" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt" iD="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="border" lowerBound="1"
@@ -91,26 +109,36 @@
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean"
           defaultValueLiteral="true"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="SetTroops" eSuperTypes="#//actions/Action">
+    <eClassifiers xsi:type="ecore:EClass" name="SetTroops" eSuperTypes="#//actions/InGameAction">
       <eStructuralFeatures xsi:type="ecore:EReference" name="country" lowerBound="1"
           eType="#//board/Country"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="troops" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="CoinCards" eSuperTypes="#//actions/Action">
+    <eClassifiers xsi:type="ecore:EClass" name="CoinCards" eSuperTypes="#//actions/InGameAction">
       <eStructuralFeatures xsi:type="ecore:EReference" name="cards" lowerBound="3"
           upperBound="3" eType="#//board/Card"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="Action" abstract="true">
+    <eClassifiers xsi:type="ecore:EClass" name="InGameAction" abstract="true" eSuperTypes="#//actions/Action">
       <eStructuralFeatures xsi:type="ecore:EReference" name="player" lowerBound="1"
           eType="#//gamestate/Player"/>
     </eClassifiers>
-    <eClassifiers xsi:type="ecore:EClass" name="MoveTroops" eSuperTypes="#//actions/Action">
+    <eClassifiers xsi:type="ecore:EClass" name="MoveTroops" eSuperTypes="#//actions/InGameAction">
       <eStructuralFeatures xsi:type="ecore:EReference" name="from" lowerBound="1"
           eType="#//board/Country"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="to" lowerBound="1" eType="#//board/Country"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="troops" lowerBound="1"
           eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EInt"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="AddPlayer" eSuperTypes="#//actions/Action">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="players" lowerBound="1"
+          upperBound="-1" eType="#//gamestate/Player" containment="true"/>
+    </eClassifiers>
+    <eClassifiers xsi:type="ecore:EClass" name="StartGame" eSuperTypes="#//actions/Action"/>
+    <eClassifiers xsi:type="ecore:EClass" name="Action" abstract="true"/>
+    <eClassifiers xsi:type="ecore:EClass" name="RemovePlayer" eSuperTypes="#//actions/Action">
+      <eStructuralFeatures xsi:type="ecore:EReference" name="players" lowerBound="1"
+          upperBound="-1" eType="#//gamestate/Player"/>
     </eClassifiers>
   </eSubpackages>
 </ecore:EPackage>
