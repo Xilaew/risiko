@@ -14,5 +14,4 @@ public class EngineTest {
 		engine.setBoard(new FileInputStream(boardFile));
 		engine.getBoard(System.out);
 	}
-
 }

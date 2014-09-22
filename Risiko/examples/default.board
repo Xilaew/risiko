@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<board:Board xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:board="http://www.example.org/risiko/board">
+  <countries border="//@borders.0 //@borders.1 //@borders.2" name="Westaustralien" continent="//@continents[name='Australien']"/>
+  <countries border="//@borders.0 //@borders.3" name="Ostaustralien" continent="//@continents[name='Australien']"/>
+  <countries border="//@borders.2 //@borders.3 //@borders.4" name="Neuguinea" continent="//@continents[name='Australien']"/>
+  <countries border="//@borders.1 //@borders.4" name="Indonesien" continent="//@continents[name='Australien']"/>
+  <countries border="//@borders.5 //@borders.6" name="Siam" continent="//@continents[name='Asien']"/>
+  <countries border="//@borders.5 //@borders.7 //@borders.8" name="Indien" continent="//@continents[name='Asien']"/>
+  <countries border="//@borders.7 //@borders.9" name="Mittlerer Osten" continent="//@continents[name='Asien']"/>
+  <countries border="//@borders.6 //@borders.10 //@borders.11 //@borders.12 //@borders.13" name="China" continent="//@continents[name='Asien']"/>
+  <countries border="//@borders.8 //@borders.9 //@borders.10 //@borders.14" name="Afghanistan" continent="//@continents[name='Asien']"/>
+  <countries border="//@borders.11 //@borders.18 //@borders.19 //@borders.20 //@borders.21" name="Mongolei" continent="//@continents[name='Asien']"/>
+  <countries border="//@borders.21 //@borders.22" name="Japan" continent="//@continents[name='Asien']"/>
+  <countries border="//@borders.20 //@borders.22 //@borders.23 //@borders.25" name="Kamtschatka" continent="//@continents[name='Asien']"/>
+  <countries border="//@borders.17 //@borders.19 //@borders.23 //@borders.24" name="Irkutzk" continent="//@continents[name='Asien']"/>
+  <countries border="//@borders.12 //@borders.15 //@borders.16 //@borders.17 //@borders.18" name="Sibirien" continent="//@continents[name='Asien']"/>
+  <countries border="//@borders.13 //@borders.14 //@borders.15" name="Ural" continent="//@continents[name='Asien']"/>
+  <countries border="//@borders.16 //@borders.24 //@borders.25" name="Jakutien" continent="//@continents[name='Asien']"/>
+  <borders country="//@countries[name='Ostaustralien'] //@countries[name='Westaustralien']"/>
+  <borders country="//@countries[name='Indonesien'] //@countries[name='Westaustralien']" type="SEA"/>
+  <borders country="//@countries[name='Neuguinea'] //@countries[name='Westaustralien']" type="SEA"/>
+  <borders country="//@countries[name='Neuguinea'] //@countries[name='Ostaustralien']" type="SEA"/>
+  <borders country="//@countries[name='Indonesien'] //@countries[name='Neuguinea']" type="SEA"/>
+  <borders country="//@countries[name='Indien'] //@countries[name='Siam']"/>
+  <borders country="//@countries[name='China'] //@countries[name='Siam']"/>
+  <borders country="//@countries[name='Indien'] //@countries[name='Mittlerer%20Osten']"/>
+  <borders country="//@countries[name='Afghanistan'] //@countries[name='Indien']"/>
+  <borders country="//@countries[name='Afghanistan'] //@countries[name='Mittlerer%20Osten']"/>
+  <borders country="//@countries[name='Afghanistan'] //@countries[name='China']"/>
+  <borders country="//@countries[name='China'] //@countries[name='Mongolei']"/>
+  <borders country="//@countries[name='China'] //@countries[name='Sibirien']"/>
+  <borders country="//@countries[name='China'] //@countries[name='Ural']"/>
+  <borders country="//@countries[name='Afghanistan'] //@countries[name='Ural']"/>
+  <borders country="//@countries[name='Sibirien'] //@countries[name='Ural']"/>
+  <borders country="//@countries[name='Jakutien'] //@countries[name='Sibirien']"/>
+  <borders country="//@countries[name='Irkutzk'] //@countries[name='Sibirien']"/>
+  <borders country="//@countries[name='Mongolei'] //@countries[name='Sibirien']"/>
+  <borders country="//@countries[name='Irkutzk'] //@countries[name='Mongolei']"/>
+  <borders country="//@countries[name='Kamtschatka'] //@countries[name='Mongolei']"/>
+  <borders country="//@countries[name='Japan'] //@countries[name='Mongolei']" type="SEA"/>
+  <borders country="//@countries[name='Japan'] //@countries[name='Kamtschatka']" type="SEA"/>
+  <borders country="//@countries[name='Irkutzk'] //@countries[name='Kamtschatka']"/>
+  <borders country="//@countries[name='Irkutzk'] //@countries[name='Jakutien']"/>
+  <borders country="//@countries[name='Jakutien'] //@countries[name='Kamtschatka']"/>
+  <continents country="//@countries[name='Indonesien'] //@countries[name='Neuguinea'] //@countries[name='Ostaustralien'] //@countries[name='Westaustralien']" additionalTroops="2" name="Australien"/>
+  <continents country="//@countries[name='Afghanistan'] //@countries[name='China'] //@countries[name='Indien'] //@countries[name='Irkutzk'] //@countries[name='Jakutien'] //@countries[name='Japan'] //@countries[name='Kamtschatka'] //@countries[name='Mittlerer%20Osten'] //@countries[name='Mongolei'] //@countries[name='Siam'] //@countries[name='Sibirien'] //@countries[name='Ural']" additionalTroops="7" name="Asien"/>
+  <additionalTroops>4</additionalTroops>
+  <additionalTroops>6</additionalTroops>
+  <additionalTroops>8</additionalTroops>
+  <additionalTroops>10</additionalTroops>
+  <additionalTroops>15</additionalTroops>
+  <additionalTroops>20</additionalTroops>
+  <additionalTroops>25</additionalTroops>
+  <additionalTroops>30</additionalTroops>
+  <additionalTroops>35</additionalTroops>
+  <additionalTroops>40</additionalTroops>
+  <additionalTroops>45</additionalTroops>
+  <additionalTroops>50</additionalTroops>
+  <additionalTroops>55</additionalTroops>
+  <additionalTroops>60</additionalTroops>
+  <additionalTroops>65</additionalTroops>
+  <additionalTroops>70</additionalTroops>
+  <cards symbol="Joker"/>
+</board:Board>
