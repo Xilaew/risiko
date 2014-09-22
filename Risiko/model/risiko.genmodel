@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<genmodel:GenModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
+    xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/Risiko/src" modelPluginID="Risiko" modelName="Risiko"
+    rootExtendsClass="org.eclipse.emf.ecore.impl.MinimalEObjectImpl$Container" importerID="org.eclipse.emf.importer.ecore"
+    complianceLevel="7.0" copyrightFields="false" operationReflection="true" importOrganizing="true">
+  <foreignModel>risiko.ecore</foreignModel>
+  <genPackages prefix="risiko" disposableProviderFactory="true" ecorePackage="risiko.ecore#/">
+    <nestedGenPackages prefix="board" basePackage="risiko" disposableProviderFactory="true"
+        fileExtensions="board" ecorePackage="risiko.ecore#//board">
+      <genEnums typeSafeEnumCompatible="false" ecoreEnum="risiko.ecore#//board/BorderType">
+        <genEnumLiterals ecoreEnumLiteral="risiko.ecore#//board/BorderType/SEA"/>
+        <genEnumLiterals ecoreEnumLiteral="risiko.ecore#//board/BorderType/LAND"/>
+      </genEnums>
+      <genEnums typeSafeEnumCompatible="false" ecoreEnum="risiko.ecore#//board/CardSymbol">
+        <genEnumLiterals ecoreEnumLiteral="risiko.ecore#//board/CardSymbol/Infanterie"/>
+        <genEnumLiterals ecoreEnumLiteral="risiko.ecore#//board/CardSymbol/Kavallerie"/>
+        <genEnumLiterals ecoreEnumLiteral="risiko.ecore#//board/CardSymbol/Artillerie"/>
+        <genEnumLiterals ecoreEnumLiteral="risiko.ecore#//board/CardSymbol/Joker"/>
+      </genEnums>
+      <genClasses ecoreClass="risiko.ecore#//board/Board">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference risiko.ecore#//board/Board/countries"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference risiko.ecore#//board/Board/borders"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference risiko.ecore#//board/Board/continents"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute risiko.ecore#//board/Board/additionalTroops"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference risiko.ecore#//board/Board/cards"/>
+      </genClasses>
+      <genClasses ecoreClass="risiko.ecore#//board/Country">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference risiko.ecore#//board/Country/border"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute risiko.ecore#//board/Country/name"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference risiko.ecore#//board/Country/continent"/>
+      </genClasses>
+      <genClasses ecoreClass="risiko.ecore#//board/Border">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference risiko.ecore#//board/Border/country"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute risiko.ecore#//board/Border/type"/>
+      </genClasses>
+      <genClasses ecoreClass="risiko.ecore#//board/Continent">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference risiko.ecore#//board/Continent/country"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute risiko.ecore#//board/Continent/additionalTroops"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute risiko.ecore#//board/Continent/name"/>
+      </genClasses>
+      <genClasses ecoreClass="risiko.ecore#//board/Card">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute risiko.ecore#//board/Card/symbol"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference risiko.ecore#//board/Card/country"/>
+      </genClasses>
+    </nestedGenPackages>
+    <nestedGenPackages prefix="state" basePackage="risiko" disposableProviderFactory="true"
+        fileExtensions="state" ecorePackage="risiko.ecore#//gamestate">
+      <genClasses ecoreClass="risiko.ecore#//gamestate/Player">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference risiko.ecore#//gamestate/Player/ownedCountries"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference risiko.ecore#//gamestate/Player/ownedCards"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute risiko.ecore#//gamestate/Player/troopsToSet"/>
+      </genClasses>
+      <genClasses ecoreClass="risiko.ecore#//gamestate/State">
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference risiko.ecore#//gamestate/State/players"/>
+        <genFeatures children="true" createChild="true" propertySortChoices="true"
+            ecoreFeature="ecore:EReference risiko.ecore#//gamestate/State/countryState"/>
+      </genClasses>
+      <genClasses ecoreClass="risiko.ecore#//gamestate/CountryState">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference risiko.ecore#//gamestate/CountryState/player"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference risiko.ecore#//gamestate/CountryState/country"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute risiko.ecore#//gamestate/CountryState/troops"/>
+      </genClasses>
+      <genClasses ecoreClass="risiko.ecore#//gamestate/CountryToCountryStateMap">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference risiko.ecore#//gamestate/CountryToCountryStateMap/key"/>
+        <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference risiko.ecore#//gamestate/CountryToCountryStateMap/value"/>
+      </genClasses>
+    </nestedGenPackages>
+    <nestedGenPackages prefix="action" basePackage="risiko" disposableProviderFactory="true"
+        fileExtensions="action" ecorePackage="risiko.ecore#//actions">
+      <genClasses ecoreClass="risiko.ecore#//actions/Atack">
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute risiko.ecore#//actions/Atack/troops"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference risiko.ecore#//actions/Atack/border"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute risiko.ecore#//actions/Atack/direction"/>
+      </genClasses>
+      <genClasses ecoreClass="risiko.ecore#//actions/SetTroops">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference risiko.ecore#//actions/SetTroops/country"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute risiko.ecore#//actions/SetTroops/troops"/>
+      </genClasses>
+      <genClasses ecoreClass="risiko.ecore#//actions/CoinCards">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference risiko.ecore#//actions/CoinCards/cards"/>
+      </genClasses>
+      <genClasses ecoreClass="risiko.ecore#//actions/Action">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference risiko.ecore#//actions/Action/player"/>
+      </genClasses>
+      <genClasses ecoreClass="risiko.ecore#//actions/MoveTroops">
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference risiko.ecore#//actions/MoveTroops/from"/>
+        <genFeatures notify="false" createChild="false" propertySortChoices="true"
+            ecoreFeature="ecore:EReference risiko.ecore#//actions/MoveTroops/to"/>
+        <genFeatures createChild="false" ecoreFeature="ecore:EAttribute risiko.ecore#//actions/MoveTroops/troops"/>
+      </genClasses>
+    </nestedGenPackages>
+  </genPackages>
+</genmodel:GenModel>
