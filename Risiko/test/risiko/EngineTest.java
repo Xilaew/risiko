@@ -10,7 +10,7 @@ public class EngineTest {
 	public static void main(String[] args) throws FileNotFoundException,
 			IOException, RuntimeException {
 		Engine engine = new Engine();
-		File boardFile = new File("examples/board.board");
+		File boardFile = new File("examples/default.board");
 		engine.setBoard(new FileInputStream(boardFile));
 		engine.getBoard(System.out);
 	}
