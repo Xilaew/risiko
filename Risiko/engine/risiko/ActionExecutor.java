@@ -5,8 +5,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.emf.common.util.EList;
-
 import risiko.actions.Action;
 import risiko.actions.AddPlayer;
 import risiko.actions.Atack;
@@ -18,12 +16,11 @@ import risiko.actions.StartGame;
 import risiko.actions.util.actionSwitch;
 import risiko.board.Board;
 import risiko.board.Country;
-import risiko.board.boardFactory;
-import risiko.board.boardPackage;
 import risiko.gamestate.CountryState;
 import risiko.gamestate.GameState;
 import risiko.gamestate.Player;
 import risiko.gamestate.State;
+import risiko.gamestate.TurnPhase;
 import risiko.gamestate.stateFactory;
 
 /**
@@ -33,7 +30,7 @@ import risiko.gamestate.stateFactory;
  * @author xilaew
  *
  */
-public class ActionExecutor extends actionSwitch<Object> {
+public class ActionExecutor extends actionSwitch<State> {
 
 	private final State state;
 	private final Board board;
@@ -44,42 +41,58 @@ public class ActionExecutor extends actionSwitch<Object> {
 	}
 
 	/**
-	 * Executes the given action and updates the passed state. The board is left
-	 * unchanged. The passed action might also be invalidated.
+	 * Executes the given action and updates state. The board is left unchanged.
+	 * The passed action might also be invalidated.
 	 * 
 	 * @param action
 	 */
-	public void execute(Action action) {
+	public State execute(Action action) {
 		System.out.println("executing an Action");
-		this.doSwitch(action);
+		return this.doSwitch(action);
 	}
 
 	@Override
-	public Object caseAtack(Atack object) {
+	public State caseAtack(Atack object) {
 		// TODO Auto-generated method stub
 		return super.caseAtack(object);
 	}
 
 	@Override
-	public Object caseSetTroops(SetTroops object) {
-		// TODO Auto-generated method stub
-		return super.caseSetTroops(object);
+	public State caseSetTroops(SetTroops arg) {
+		if (arg.getPlayer().equals(state.getTurn())
+				&& state.getTroopsToSet() >= arg.getTroops()
+				&& state.getPhase().getValue() <= TurnPhase.SET_TROOPS_VALUE
+				&& (state.getState().equals(GameState.PLAY) || state.getState()
+						.equals(GameState.INITIAL_TROOP_DISTRIBUTION))) {
+			CountryState cs = state.getCountryState().get(arg.getCountry());
+			cs.setTroops(cs.getTroops() + arg.getTroops());
+			state.setTroopsToSet(state.getTroopsToSet() - arg.getTroops());
+			if (state.getState().equals(GameState.INITIAL_TROOP_DISTRIBUTION)) {
+				int nextIndex = state.getPlayers().indexOf(state.getTurn()) + 1;
+				state.setTurn(state.getPlayers().get(nextIndex));
+				state.setPhase(TurnPhase.SET_TROOPS);
+			} else if (state.getTroopsToSet() == 0) {
+				state.setPhase(TurnPhase.FIGHT);
+			}
+			return state;
+		}
+		return super.caseSetTroops(arg);
 	}
 
 	@Override
-	public Object caseCoinCards(CoinCards object) {
+	public State caseCoinCards(CoinCards object) {
 		// TODO Auto-generated method stub
 		return super.caseCoinCards(object);
 	}
 
 	@Override
-	public Object caseMoveTroops(MoveTroops object) {
+	public State caseMoveTroops(MoveTroops object) {
 		// TODO Auto-generated method stub
 		return super.caseMoveTroops(object);
 	}
 
 	@Override
-	public Object caseAddPlayer(AddPlayer object) {
+	public State caseAddPlayer(AddPlayer object) {
 		if (state.getState() == GameState.ACCEPTING_PLAYERS) {
 			state.getPlayers().addAll(object.getPlayers());
 			return state;
@@ -88,13 +101,14 @@ public class ActionExecutor extends actionSwitch<Object> {
 	}
 
 	@Override
-	public Object caseStartGame(StartGame object) {
+	public State caseStartGame(StartGame object) {
 		if (state.getState() == GameState.ACCEPTING_PLAYERS
 				&& state.getPlayers().size() >= 2) {
+			distributeCountriesAmongPlayers();
 			state.setState(GameState.INITIAL_TROOP_DISTRIBUTION);
 			state.setTroopsToSet(1);
 			state.setTurn(state.getPlayers().get(0));
-			distributeCountriesAmongPlayers();
+			state.setPhase(TurnPhase.SET_TROOPS);
 			return state;
 		}
 		return super.caseStartGame(object);
@@ -108,20 +122,26 @@ public class ActionExecutor extends actionSwitch<Object> {
 			toDistribute.add(null);
 		}
 		Collections.shuffle(toDistribute);
-		Iterator<Player> playerIt = state.getPlayers().listIterator(
-				toDistribute.size());
+		Iterator<Player> playerIt = state.getPlayers().iterator();
+		Player player;
 		for (Country c : toDistribute) {
-			CountryState countryState = stateFactory.eINSTANCE
-					.createCountryState();
-			countryState.setTroops(1);
-			countryState.setCountry(c);
-			countryState.setPlayer(playerIt.next());
-			state.getCountryState().put(c, countryState);
+			if (!playerIt.hasNext()) {
+				playerIt = state.getPlayers().iterator();
+			}
+			player = playerIt.next();
+			if (c != null) {
+				CountryState countryState = stateFactory.eINSTANCE
+						.createCountryState();
+				countryState.setTroops(1);
+				countryState.setCountry(c);
+				countryState.setPlayer(player);
+				state.getCountryState().put(c, countryState);
+			}
 		}
 	}
 
 	@Override
-	public Object caseRemovePlayer(RemovePlayer object) {
+	public State caseRemovePlayer(RemovePlayer object) {
 		if (state.getState() == GameState.ACCEPTING_PLAYERS) {
 			state.getPlayers().removeAll(object.getPlayers());
 			return state;
