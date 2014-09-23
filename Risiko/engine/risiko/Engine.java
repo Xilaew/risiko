@@ -135,7 +135,8 @@ public class Engine {
 			Action action = (Action) o;
 			validate(action);
 			if (executor == null) {
-				this.executor = ExecutorFactory.getExecutor(this.state);
+				this.executor = ExecutorFactory.getExecutor(this.board,
+						this.state);
 			}
 			executor.execute(action);
 		}
