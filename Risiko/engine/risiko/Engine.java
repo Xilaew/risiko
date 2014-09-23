@@ -32,8 +32,8 @@ public class Engine {
 	private final Resource stateResource;
 	private final Resource actionResource;
 	private final Resource inputResource;
-	
-	private final Executor executor = new Executor();
+
+	private ActionExecutor executor;
 
 	/**
 	 * Initializes an empty engine. To start playing you will need to set a
@@ -134,7 +134,10 @@ public class Engine {
 		for (EObject o : actionResource.getContents()) {
 			Action action = (Action) o;
 			validate(action);
-			executor.execute(board, state, action);
+			if (executor == null) {
+				this.executor = ExecutorFactory.getExecutor(this.state);
+			}
+			executor.execute(action);
 		}
 	}
 
