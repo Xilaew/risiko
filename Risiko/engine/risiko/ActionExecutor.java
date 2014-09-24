@@ -78,7 +78,9 @@ public class ActionExecutor extends actionSwitch<State> {
 						% playerCount;
 				Player nextPlayer = players.get(nextIndex);
 				while (nextPlayer.getTotalTroops() < board.getInitialTroops()
-						.get(playerCount))
+						.get(playerCount)){
+					
+				}
 					state.setTurn(state.getPlayers().get(nextIndex));
 				state.setPhase(TurnPhase.SET_TROOPS);
 			} else if (state.getTroopsToSet() == 0) {
