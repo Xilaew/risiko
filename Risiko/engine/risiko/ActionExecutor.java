@@ -64,12 +64,22 @@ public class ActionExecutor extends actionSwitch<State> {
 				&& state.getPhase().getValue() <= TurnPhase.SET_TROOPS_VALUE
 				&& (state.getState().equals(GameState.PLAY) || state.getState()
 						.equals(GameState.INITIAL_TROOP_DISTRIBUTION))) {
+			// set Troops
 			CountryState cs = state.getCountryState().get(arg.getCountry());
 			cs.setTroops(cs.getTroops() + arg.getTroops());
 			state.setTroopsToSet(state.getTroopsToSet() - arg.getTroops());
+
 			if (state.getState().equals(GameState.INITIAL_TROOP_DISTRIBUTION)) {
-				int nextIndex = state.getPlayers().indexOf(state.getTurn()) + 1;
-				state.setTurn(state.getPlayers().get(nextIndex));
+				// directly move on to the next player that has not set all its
+				// initial Troops yet.
+				List<Player> players = state.getPlayers();
+				int playerCount = players.size();
+				int nextIndex = (players.indexOf(state.getTurn()) + 1)
+						% playerCount;
+				Player nextPlayer = players.get(nextIndex);
+				while (nextPlayer.getTotalTroops() < board.getInitialTroops()
+						.get(playerCount))
+					state.setTurn(state.getPlayers().get(nextIndex));
 				state.setPhase(TurnPhase.SET_TROOPS);
 			} else if (state.getTroopsToSet() == 0) {
 				state.setPhase(TurnPhase.FIGHT);
