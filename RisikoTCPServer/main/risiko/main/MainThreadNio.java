@@ -22,7 +22,7 @@ public class MainThreadNio implements Runnable {
 	}
 	
 	public boolean registerClient(SocketChannel sc){
-		sc.register(this.sel, ops);
+//		sc.register(this.sel, sc.);
 		return false;
 	}
 
