@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.List;
+import java.util.Random;
 
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -12,11 +14,14 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
 import risiko.actions.AddPlayer;
+import risiko.actions.SetTroops;
 import risiko.actions.StartGame;
 import risiko.actions.actionFactory;
 import risiko.actions.actionPackage;
 import risiko.board.Board;
 import risiko.board.boardPackage;
+import risiko.gamestate.CountryState;
+import risiko.gamestate.GameState;
 import risiko.gamestate.Player;
 import risiko.gamestate.State;
 import risiko.gamestate.stateFactory;
@@ -27,20 +32,20 @@ public class ExecutorTest {
 			IOException {
 		ResourceSet ress = initializeResourceSet();
 		File boardFile = new File("examples/default.board");
-//		File stateFile = new File("examples/default.state");
+		// File stateFile = new File("examples/default.state");
 		actionFactory af = actionFactory.eINSTANCE;
 		stateFactory sf = stateFactory.eINSTANCE;
 		Resource boardRes = ress.createResource(URI
 				.createURI("http://Risiko.board"));
-//		Resource stateRes = ress.createResource(URI
-//				.createURI("http://Risiko.state"));
+		// Resource stateRes = ress.createResource(URI
+		// .createURI("http://Risiko.state"));
 		Resource resultRes = ress.createResource(URI.createURI("test"));
 		boardRes.load(new FileInputStream(boardFile), null);
-		
+
 		State state = sf.createState();
-//		state.setState(GameState.ACCEPTING_PLAYERS);
-		
-//		stateRes.load(new FileInputStream(stateFile), null);
+		// state.setState(GameState.ACCEPTING_PLAYERS);
+
+		// stateRes.load(new FileInputStream(stateFile), null);
 		ActionExecutor executor = new ActionExecutor((Board) boardRes
 				.getContents().get(0), state);
 
@@ -57,9 +62,22 @@ public class ExecutorTest {
 
 		StartGame startGame = af.createStartGame();
 
+		SetTroops setTroops = af.createSetTroops();
+
 		executor.execute(addPlayers);
 		State result = executor.execute(startGame);
-		
+		Random random = new Random();
+		while (result.getState() != GameState.PLAY) {
+			setTroops.setTroops(result.getTroopsToSet());
+			assert result.getTroopsToSet() == 1;
+			assert !result.getTurn().equals(setTroops.getPlayer());
+			setTroops.setPlayer(result.getTurn());
+			List<CountryState> countries = result.getTurn().getOwnedCountries();
+			setTroops.setCountry(countries
+					.get(random.nextInt(countries.size())).getCountry());
+			state = executor.execute(setTroops);
+		}
+
 		resultRes.getContents().add(result);
 		resultRes.save(System.out, null);
 	}

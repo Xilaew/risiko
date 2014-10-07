@@ -27,7 +27,8 @@ import risiko.board.Country;
  * </p>
  *
  * @see risiko.gamestate.statePackage#getState()
- * @model
+ * @model annotation="http://www.eclipse.org/emf/2002/Ecore constraints='countryToStateMapIsAccurate'"
+ *        annotation="http://www.eclipse.org/emf/2002/Ecore/OCL countryToStateMapIsAccurate='self.countryState->forAll(state|state.key=state.value.country)'"
  * @generated
  */
 public interface State extends EObject {

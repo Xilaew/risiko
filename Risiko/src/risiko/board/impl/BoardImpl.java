@@ -3,20 +3,14 @@
 package risiko.board.impl;
 
 import java.util.Collection;
-
 import org.eclipse.emf.common.notify.NotificationChain;
-
 import org.eclipse.emf.common.util.EList;
-
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.InternalEObject;
-
 import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
-import org.eclipse.emf.ecore.util.EDataTypeUniqueEList;
+import org.eclipse.emf.ecore.util.EDataTypeEList;
 import org.eclipse.emf.ecore.util.EObjectContainmentEList;
 import org.eclipse.emf.ecore.util.InternalEList;
-
 import risiko.board.Board;
 import risiko.board.Border;
 import risiko.board.Card;
@@ -165,7 +159,7 @@ public class BoardImpl extends MinimalEObjectImpl.Container implements Board {
 	 */
 	public EList<Integer> getAdditionalTroops() {
 		if (additionalTroops == null) {
-			additionalTroops = new EDataTypeUniqueEList<Integer>(Integer.class, this, boardPackage.BOARD__ADDITIONAL_TROOPS);
+			additionalTroops = new EDataTypeEList<Integer>(Integer.class, this, boardPackage.BOARD__ADDITIONAL_TROOPS);
 		}
 		return additionalTroops;
 	}
@@ -189,7 +183,7 @@ public class BoardImpl extends MinimalEObjectImpl.Container implements Board {
 	 */
 	public EList<Integer> getInitialTroops() {
 		if (initialTroops == null) {
-			initialTroops = new EDataTypeUniqueEList<Integer>(Integer.class, this, boardPackage.BOARD__INITIAL_TROOPS);
+			initialTroops = new EDataTypeEList<Integer>(Integer.class, this, boardPackage.BOARD__INITIAL_TROOPS);
 		}
 		return initialTroops;
 	}

@@ -61,4 +61,11 @@
   <additionalTroops>65</additionalTroops>
   <additionalTroops>70</additionalTroops>
   <cards symbol="Joker"/>
+  <initialTroops>0</initialTroops>
+  <initialTroops>0</initialTroops>
+  <initialTroops>35</initialTroops>
+  <initialTroops>35</initialTroops>
+  <initialTroops>30</initialTroops>
+  <initialTroops>25</initialTroops>
+  <initialTroops>20</initialTroops>
 </board:Board>

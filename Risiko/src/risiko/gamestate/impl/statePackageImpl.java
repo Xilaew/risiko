@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
+import org.eclipse.emf.ecore.EValidator;
 import org.eclipse.emf.ecore.impl.EPackageImpl;
 
 import risiko.actions.actionPackage;
@@ -27,6 +28,7 @@ import risiko.gamestate.State;
 import risiko.gamestate.TurnPhase;
 import risiko.gamestate.stateFactory;
 import risiko.gamestate.statePackage;
+import risiko.gamestate.util.stateValidator;
 
 /**
  * <!-- begin-user-doc -->
@@ -136,6 +138,15 @@ public class statePackageImpl extends EPackageImpl implements statePackage {
 		thestatePackage.initializePackageContents();
 		theboardPackage.initializePackageContents();
 		theactionPackage.initializePackageContents();
+
+		// Register package validator
+		EValidator.Registry.INSTANCE.put
+			(thestatePackage, 
+			 new EValidator.Descriptor() {
+				 public EValidator getEValidator() {
+					 return stateValidator.INSTANCE;
+				 }
+			 });
 
 		// Mark meta-data to indicate it can't be changed
 		thestatePackage.freeze();
@@ -462,6 +473,50 @@ public class statePackageImpl extends EPackageImpl implements statePackage {
 
 		// Create resource
 		createResource(eNS_URI);
+
+		// Create annotations
+		// http://www.eclipse.org/emf/2002/Ecore
+		createEcoreAnnotations();
+		// http://www.eclipse.org/emf/2002/Ecore/OCL
+		createOCLAnnotations();
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.eclipse.org/emf/2002/Ecore</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createEcoreAnnotations() {
+		String source = "http://www.eclipse.org/emf/2002/Ecore";	
+		addAnnotation
+		  (this, 
+		   source, 
+		   new String[] {
+			 "validationDelegates", "http://www.eclipse.org/emf/2002/Ecore/OCL"
+		   });	
+		addAnnotation
+		  (stateEClass, 
+		   source, 
+		   new String[] {
+			 "constraints", "countryToStateMapIsAccurate"
+		   });
+	}
+
+	/**
+	 * Initializes the annotations for <b>http://www.eclipse.org/emf/2002/Ecore/OCL</b>.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	protected void createOCLAnnotations() {
+		String source = "http://www.eclipse.org/emf/2002/Ecore/OCL";	
+		addAnnotation
+		  (stateEClass, 
+		   source, 
+		   new String[] {
+			 "countryToStateMapIsAccurate", "self.countryState->forAll(state|state.key=state.value.country)"
+		   });
 	}
 
 } //statePackageImpl

@@ -87,7 +87,7 @@ public interface Board extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Additional Troops</em>' attribute list.
 	 * @see risiko.board.boardPackage#getBoard_AdditionalTroops()
-	 * @model lower="5"
+	 * @model unique="false" lower="5"
 	 * @generated
 	 */
 	EList<Integer> getAdditionalTroops();
@@ -119,7 +119,7 @@ public interface Board extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Initial Troops</em>' attribute list.
 	 * @see risiko.board.boardPackage#getBoard_InitialTroops()
-	 * @model lower="2"
+	 * @model unique="false" lower="2"
 	 * @generated
 	 */
 	EList<Integer> getInitialTroops();

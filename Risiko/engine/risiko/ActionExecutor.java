@@ -64,26 +64,37 @@ public class ActionExecutor extends actionSwitch<State> {
 				&& state.getPhase().getValue() <= TurnPhase.SET_TROOPS_VALUE
 				&& (state.getState().equals(GameState.PLAY) || state.getState()
 						.equals(GameState.INITIAL_TROOP_DISTRIBUTION))) {
+
 			// set Troops
 			CountryState cs = state.getCountryState().get(arg.getCountry());
 			cs.setTroops(cs.getTroops() + arg.getTroops());
 			state.setTroopsToSet(state.getTroopsToSet() - arg.getTroops());
 
 			if (state.getState().equals(GameState.INITIAL_TROOP_DISTRIBUTION)) {
-				// directly move on to the next player that has not set all its
-				// initial Troops yet.
+				// move on to the next player that has not set all its initial
+				// Troops yet.
 				List<Player> players = state.getPlayers();
 				int playerCount = players.size();
 				int nextIndex = (players.indexOf(state.getTurn()) + 1)
 						% playerCount;
 				Player nextPlayer = players.get(nextIndex);
-				while (nextPlayer.getTotalTroops() < board.getInitialTroops()
-						.get(playerCount)){
-					
+				while (nextPlayer.getTotalTroops() >= board.getInitialTroops()
+						.get(playerCount)) {
+					if (nextPlayer == state.getTurn()) {
+						// obviously all Players have set all their initial
+						// troops. move on to the GameState Play.
+						state.setState(GameState.PLAY);
+						state.setPhase(TurnPhase.FIGHT);
+						state.setTroopsToSet(0);
+						nextPlayer = players.get(0);
+						break;
+					}
+					nextIndex = (nextIndex + 1) % playerCount;
+					nextPlayer = players.get(nextIndex);
 				}
-					state.setTurn(state.getPlayers().get(nextIndex));
-				state.setPhase(TurnPhase.SET_TROOPS);
+				state.setTurn(nextPlayer);
 			} else if (state.getTroopsToSet() == 0) {
+				// No more Troops to set? move on to Fighting Phase!
 				state.setPhase(TurnPhase.FIGHT);
 			}
 			return state;
@@ -116,7 +127,9 @@ public class ActionExecutor extends actionSwitch<State> {
 	public State caseStartGame(StartGame object) {
 		if (state.getState() == GameState.ACCEPTING_PLAYERS
 				&& state.getPlayers().size() >= 2) {
+
 			distributeCountriesAmongPlayers();
+
 			state.setState(GameState.INITIAL_TROOP_DISTRIBUTION);
 			state.setTroopsToSet(1);
 			state.setTurn(state.getPlayers().get(0));
