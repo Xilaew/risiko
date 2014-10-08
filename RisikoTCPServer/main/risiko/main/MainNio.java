@@ -90,16 +90,16 @@ public class MainNio implements Runnable {
 				sb.append(new String(bytes));
 				buf.clear();
 			}
-			String msg;
+			String info;
 			if (read < 0) {
-				msg = key.attachment() + " left the chat.\n";
+				info = key.attachment() + " left the chat.\n";
 				ch.close();
 			} else {
-				msg = key.attachment() + ": " + sb.toString();
+				info = key.attachment() + ": " + sb.toString();
 			}
 
-			System.out.println(msg);
-
+			System.out.println(info);
+			String msg = sb.toString();
 			if (msg.length() > 1) {
 				ByteArrayOutputStream out = new ByteArrayOutputStream();
 				ByteArrayInputStream in = new ByteArrayInputStream(sb

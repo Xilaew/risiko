@@ -3,6 +3,7 @@ package risiko;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.util.Diagnostic;
@@ -55,7 +56,7 @@ public class GameMonitor {
 		stateResource.getContents().add(this.state);
 	}
 
-	private void validate(EObject object) {
+	public void validate(EObject object) {
 		Diagnostic diagnostic = Diagnostician.INSTANCE.validate(object);
 		if (diagnostic.getSeverity() != Diagnostic.OK) {
 			printDiagnostic(diagnostic, "");
@@ -133,14 +134,13 @@ public class GameMonitor {
 		int i = 0;
 		for (EObject o : inputResource.getContents()) {
 			i++;
-			Action action = (Action) o;
-			validate(action);
-			this.addAction(action);
+			this.addAction((Action) o);
 		}
 		return i;
 	}
 
-	private void addAction(Action action) {
+	public void addAction(Action action) {
+		validate(action);
 		actions.add(action);
 		actionResource.getContents().add(action);
 	}
@@ -166,7 +166,6 @@ public class GameMonitor {
 	public void setBoard(InputStream in) throws IOException {
 		inputResource.load(in, null);
 		Board board = (Board) inputResource.getContents().get(0);
-		validate(board);
 		this.setBoard(board);
 		inputResource.unload();
 	}
@@ -190,8 +189,22 @@ public class GameMonitor {
 	public void setState(InputStream in) throws IOException {
 		inputResource.load(in, null);
 		State state = (State) inputResource.getContents().get(0);
-		validate(state);
 		this.setState(state);
+		inputResource.unload();
+	}
+
+	public void parseAndHandle(InputStream in) throws IOException {
+		inputResource.load(in, null);
+		while (!inputResource.getContents().isEmpty()) {
+			EObject o = inputResource.getContents().get(0);
+			if (o instanceof Board) {
+				this.setBoard((Board) o);
+			} else if (o instanceof Action) {
+				this.addAction((Action) o);
+			} else if (o instanceof State) {
+				this.setState((State) o);
+			}
+		}
 		inputResource.unload();
 	}
 
@@ -200,6 +213,7 @@ public class GameMonitor {
 	}
 
 	public void setBoard(Board board) {
+		validate(board);
 		this.board = board;
 		this.boardResource.getContents().clear();
 		this.boardResource.getContents().add(board);
@@ -210,6 +224,7 @@ public class GameMonitor {
 	}
 
 	public void setState(State state) {
+		validate(state);
 		this.state = state;
 		stateResource.getContents().clear();
 		stateResource.getContents().add(this.state);
@@ -232,10 +247,6 @@ public class GameMonitor {
 	}
 
 	public List<Action> getActions() {
-		return actions;
-	}
-
-	public void setActions(List<Action> actions) {
-		this.actions = actions;
+		return Collections.unmodifiableList(actions);
 	}
 }

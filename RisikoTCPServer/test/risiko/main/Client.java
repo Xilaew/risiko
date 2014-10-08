@@ -47,11 +47,16 @@ public class Client implements Runnable{
 			while ((i=msg.indexOf('\0'))>=0){
 				current = msg.substring(0, i);
 				msg = msg.substring(i+1);
-				game.setBoard(new ByteArrayInputStream(current.getBytes()));
+				try {
+					game.parseAndHandle(new ByteArrayInputStream(current.getBytes()));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 			System.out.println();
 			System.out.println();
 			game.getBoard(System.out);
+			game.getState(System.out);
 			s.close();
 		} catch (UnknownHostException e) {
 			// TODO Auto-generated catch block
