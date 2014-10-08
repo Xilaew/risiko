@@ -1,10 +1,15 @@
 package risiko.main;
 
-import java.net.*;
-import java.nio.*;
-import java.nio.channels.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.*;
+import java.net.InetSocketAddress;
+import java.nio.ByteBuffer;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
+import java.nio.channels.ServerSocketChannel;
+import java.nio.channels.SocketChannel;
+import java.util.Iterator;
 
 import risiko.Engine;
 
@@ -12,8 +17,8 @@ public class MainNio implements Runnable {
 	private final int port;
 	private ServerSocketChannel ssc;
 	private Selector selector;
-	private ByteBuffer buf = ByteBuffer.allocate(256);
 	private Engine engine;
+	private ByteBuffer buf = ByteBuffer.allocate(256);
 
 	MainNio(int port) throws IOException {
 		this.port = port;
@@ -61,37 +66,54 @@ public class MainNio implements Runnable {
 				.toString();
 		sc.configureBlocking(false);
 		sc.register(selector, SelectionKey.OP_READ, address);
-		engine.getBoard(sc.socket().getOutputStream());
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		engine.getBoard(out);
+		out.write("\0".getBytes());
+		engine.getState(out);
+		out.write("\0".getBytes());
+		sc.write(ByteBuffer.wrap(out.toByteArray()));
+		// engine.getState(sc.socket().getOutputStream());
 		System.out.println("accepted connection from: " + address);
 	}
 
-	private void handleRead(SelectionKey key) throws IOException {
+	private void handleRead(SelectionKey key) {
 		SocketChannel ch = (SocketChannel) key.channel();
 		StringBuilder sb = new StringBuilder();
 
 		buf.clear();
 		int read = 0;
-		while ((read = ch.read(buf)) > 0) {
-			buf.flip();
-			byte[] bytes = new byte[buf.limit()];
-			buf.get(bytes);
-			sb.append(new String(bytes));
-			buf.clear();
-		}
-		String msg;
-		if (read < 0) {
-			msg = key.attachment() + " left the chat.\n";
-			ch.close();
-		} else {
-			msg = key.attachment() + ": " + sb.toString();
-		}
+		try {
+			while ((read = ch.read(buf)) > 0) {
+				buf.flip();
+				byte[] bytes = new byte[buf.limit()];
+				buf.get(bytes);
+				sb.append(new String(bytes));
+				buf.clear();
+			}
+			String msg;
+			if (read < 0) {
+				msg = key.attachment() + " left the chat.\n";
+				ch.close();
+			} else {
+				msg = key.attachment() + ": " + sb.toString();
+			}
 
-		System.out.println(msg);
-		broadcast(msg);
+			System.out.println(msg);
+
+			if (msg.length() > 1) {
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				ByteArrayInputStream in = new ByteArrayInputStream(sb
+						.toString().getBytes());
+				engine.executeAction(in, out);
+				broadcast(ByteBuffer.wrap(out.toByteArray()));
+			}
+		} catch (IOException e) {
+			key.cancel();
+			e.printStackTrace();
+		}
 	}
 
-	private void broadcast(String msg) throws IOException {
-		ByteBuffer msgBuf = ByteBuffer.wrap(msg.getBytes());
+	private void broadcast(ByteBuffer msgBuf) throws IOException {
 		for (SelectionKey key : selector.keys()) {
 			if (key.isValid() && key.channel() instanceof SocketChannel) {
 				SocketChannel sch = (SocketChannel) key.channel();
