@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+
+<!--
+-->
+
+<plugin>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated risiko -->
+      <package
+            uri="http://www.example.org/risiko/board"
+            class="risiko.board.boardPackage"
+            genModel="model/risiko.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated risiko -->
+      <package
+            uri="http://www.example.org/risiko/gamestate"
+            class="risiko.gamestate.statePackage"
+            genModel="model/risiko.genmodel"/>
+   </extension>
+
+   <extension point="org.eclipse.emf.ecore.generated_package">
+      <!-- @generated risiko -->
+      <package
+            uri="http://www.example.org/risiko/actions"
+            class="risiko.actions.actionPackage"
+            genModel="model/risiko.genmodel"/>
+   </extension>
+
+</plugin>
