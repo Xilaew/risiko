@@ -43,6 +43,7 @@ import risiko.gamestate.statePackage;
  *   <li>{@link risiko.gamestate.impl.StateImpl#getPhase <em>Phase</em>}</li>
  *   <li>{@link risiko.gamestate.impl.StateImpl#getState <em>State</em>}</li>
  *   <li>{@link risiko.gamestate.impl.StateImpl#getTroopsToSet <em>Troops To Set</em>}</li>
+ *   <li>{@link risiko.gamestate.impl.StateImpl#isConqueredCountry <em>Conquered Country</em>}</li>
  * </ul>
  * </p>
  *
@@ -138,6 +139,26 @@ public class StateImpl extends MinimalEObjectImpl.Container implements State {
 	 * @ordered
 	 */
 	protected int troopsToSet = TROOPS_TO_SET_EDEFAULT;
+
+	/**
+	 * The default value of the '{@link #isConqueredCountry() <em>Conquered Country</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isConqueredCountry()
+	 * @generated
+	 * @ordered
+	 */
+	protected static final boolean CONQUERED_COUNTRY_EDEFAULT = false;
+
+	/**
+	 * The cached value of the '{@link #isConqueredCountry() <em>Conquered Country</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see #isConqueredCountry()
+	 * @generated
+	 * @ordered
+	 */
+	protected boolean conqueredCountry = CONQUERED_COUNTRY_EDEFAULT;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -271,6 +292,27 @@ public class StateImpl extends MinimalEObjectImpl.Container implements State {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public boolean isConqueredCountry() {
+		return conqueredCountry;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public void setConqueredCountry(boolean newConqueredCountry) {
+		boolean oldConqueredCountry = conqueredCountry;
+		conqueredCountry = newConqueredCountry;
+		if (eNotificationRequired())
+			eNotify(new ENotificationImpl(this, Notification.SET, statePackage.STATE__CONQUERED_COUNTRY, oldConqueredCountry, conqueredCountry));
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	@Override
 	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
 		switch (featureID) {
@@ -303,6 +345,8 @@ public class StateImpl extends MinimalEObjectImpl.Container implements State {
 				return getState();
 			case statePackage.STATE__TROOPS_TO_SET:
 				return getTroopsToSet();
+			case statePackage.STATE__CONQUERED_COUNTRY:
+				return isConqueredCountry();
 		}
 		return super.eGet(featureID, resolve, coreType);
 	}
@@ -335,6 +379,9 @@ public class StateImpl extends MinimalEObjectImpl.Container implements State {
 			case statePackage.STATE__TROOPS_TO_SET:
 				setTroopsToSet((Integer)newValue);
 				return;
+			case statePackage.STATE__CONQUERED_COUNTRY:
+				setConqueredCountry((Boolean)newValue);
+				return;
 		}
 		super.eSet(featureID, newValue);
 	}
@@ -365,6 +412,9 @@ public class StateImpl extends MinimalEObjectImpl.Container implements State {
 			case statePackage.STATE__TROOPS_TO_SET:
 				setTroopsToSet(TROOPS_TO_SET_EDEFAULT);
 				return;
+			case statePackage.STATE__CONQUERED_COUNTRY:
+				setConqueredCountry(CONQUERED_COUNTRY_EDEFAULT);
+				return;
 		}
 		super.eUnset(featureID);
 	}
@@ -389,6 +439,8 @@ public class StateImpl extends MinimalEObjectImpl.Container implements State {
 				return state != STATE_EDEFAULT;
 			case statePackage.STATE__TROOPS_TO_SET:
 				return troopsToSet != TROOPS_TO_SET_EDEFAULT;
+			case statePackage.STATE__CONQUERED_COUNTRY:
+				return conqueredCountry != CONQUERED_COUNTRY_EDEFAULT;
 		}
 		return super.eIsSet(featureID);
 	}
@@ -409,6 +461,8 @@ public class StateImpl extends MinimalEObjectImpl.Container implements State {
 		result.append(state);
 		result.append(", troopsToSet: ");
 		result.append(troopsToSet);
+		result.append(", conqueredCountry: ");
+		result.append(conqueredCountry);
 		result.append(')');
 		return result.toString();
 	}

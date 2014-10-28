@@ -455,6 +455,44 @@ public interface actionPackage extends EPackage {
 
 
 	/**
+	 * The meta object id for the '{@link risiko.actions.impl.DrawCardImpl <em>Draw Card</em>}' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @see risiko.actions.impl.DrawCardImpl
+	 * @see risiko.actions.impl.actionPackageImpl#getDrawCard()
+	 * @generated
+	 */
+	int DRAW_CARD = 9;
+
+	/**
+	 * The feature id for the '<em><b>Player</b></em>' reference.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRAW_CARD__PLAYER = IN_GAME_ACTION__PLAYER;
+
+	/**
+	 * The number of structural features of the '<em>Draw Card</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRAW_CARD_FEATURE_COUNT = IN_GAME_ACTION_FEATURE_COUNT + 0;
+
+	/**
+	 * The number of operations of the '<em>Draw Card</em>' class.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int DRAW_CARD_OPERATION_COUNT = IN_GAME_ACTION_OPERATION_COUNT + 0;
+
+
+	/**
 	 * Returns the meta object for class '{@link risiko.actions.Atack <em>Atack</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -601,6 +639,16 @@ public interface actionPackage extends EPackage {
 	 * @generated
 	 */
 	EReference getRemovePlayer_Players();
+
+	/**
+	 * Returns the meta object for class '{@link risiko.actions.DrawCard <em>Draw Card</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for class '<em>Draw Card</em>'.
+	 * @see risiko.actions.DrawCard
+	 * @generated
+	 */
+	EClass getDrawCard();
 
 	/**
 	 * Returns the meta object for class '{@link risiko.actions.MoveTroops <em>Move Troops</em>}'.
@@ -822,6 +870,16 @@ public interface actionPackage extends EPackage {
 		 * @generated
 		 */
 		EReference REMOVE_PLAYER__PLAYERS = eINSTANCE.getRemovePlayer_Players();
+
+		/**
+		 * The meta object literal for the '{@link risiko.actions.impl.DrawCardImpl <em>Draw Card</em>}' class.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @see risiko.actions.impl.DrawCardImpl
+		 * @see risiko.actions.impl.actionPackageImpl#getDrawCard()
+		 * @generated
+		 */
+		EClass DRAW_CARD = eINSTANCE.getDrawCard();
 
 		/**
 		 * The meta object literal for the '{@link risiko.actions.impl.MoveTroopsImpl <em>Move Troops</em>}' class.

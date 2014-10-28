@@ -20,6 +20,9 @@ import org.eclipse.emf.ecore.EReference;
  *   <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
+ * <!-- begin-model-doc -->
+ * New documentation note
+ * <!-- end-model-doc -->
  * @see risiko.gamestate.stateFactory
  * @model kind="package"
  *        annotation="http://www.eclipse.org/emf/2002/Ecore validationDelegates='http://www.eclipse.org/emf/2002/Ecore/OCL'"
@@ -187,13 +190,22 @@ public interface statePackage extends EPackage {
 	int STATE__TROOPS_TO_SET = 5;
 
 	/**
+	 * The feature id for the '<em><b>Conquered Country</b></em>' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 * @ordered
+	 */
+	int STATE__CONQUERED_COUNTRY = 6;
+
+	/**
 	 * The number of structural features of the '<em>State</em>' class.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
 	 * @generated
 	 * @ordered
 	 */
-	int STATE_FEATURE_COUNT = 6;
+	int STATE_FEATURE_COUNT = 7;
 
 	/**
 	 * The number of operations of the '<em>State</em>' class.
@@ -457,6 +469,17 @@ public interface statePackage extends EPackage {
 	EAttribute getState_TroopsToSet();
 
 	/**
+	 * Returns the meta object for the attribute '{@link risiko.gamestate.State#isConqueredCountry <em>Conquered Country</em>}'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return the meta object for the attribute '<em>Conquered Country</em>'.
+	 * @see risiko.gamestate.State#isConqueredCountry()
+	 * @see #getState()
+	 * @generated
+	 */
+	EAttribute getState_ConqueredCountry();
+
+	/**
 	 * Returns the meta object for class '{@link risiko.gamestate.CountryState <em>Country State</em>}'.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
@@ -675,6 +698,14 @@ public interface statePackage extends EPackage {
 		 * @generated
 		 */
 		EAttribute STATE__TROOPS_TO_SET = eINSTANCE.getState_TroopsToSet();
+
+		/**
+		 * The meta object literal for the '<em><b>Conquered Country</b></em>' attribute feature.
+		 * <!-- begin-user-doc -->
+		 * <!-- end-user-doc -->
+		 * @generated
+		 */
+		EAttribute STATE__CONQUERED_COUNTRY = eINSTANCE.getState_ConqueredCountry();
 
 		/**
 		 * The meta object literal for the '{@link risiko.gamestate.impl.CountryStateImpl <em>Country State</em>}' class.

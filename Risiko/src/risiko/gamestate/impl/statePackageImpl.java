@@ -270,6 +270,15 @@ public class statePackageImpl extends EPackageImpl implements statePackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EAttribute getState_ConqueredCountry() {
+		return (EAttribute)stateEClass.getEStructuralFeatures().get(6);
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getCountryState() {
 		return countryStateEClass;
 	}
@@ -387,6 +396,7 @@ public class statePackageImpl extends EPackageImpl implements statePackage {
 		createEAttribute(stateEClass, STATE__PHASE);
 		createEAttribute(stateEClass, STATE__STATE);
 		createEAttribute(stateEClass, STATE__TROOPS_TO_SET);
+		createEAttribute(stateEClass, STATE__CONQUERED_COUNTRY);
 
 		countryStateEClass = createEClass(COUNTRY_STATE);
 		createEReference(countryStateEClass, COUNTRY_STATE__PLAYER);
@@ -448,6 +458,7 @@ public class statePackageImpl extends EPackageImpl implements statePackage {
 		initEAttribute(getState_Phase(), this.getTurnPhase(), "phase", null, 0, 1, State.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getState_State(), this.getGameState(), "state", null, 1, 1, State.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 		initEAttribute(getState_TroopsToSet(), ecorePackage.getEInt(), "troopsToSet", "0", 0, 1, State.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+		initEAttribute(getState_ConqueredCountry(), ecorePackage.getEBoolean(), "conqueredCountry", "false", 0, 1, State.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
 		initEClass(countryStateEClass, CountryState.class, "CountryState", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getCountryState_Player(), this.getPlayer(), this.getPlayer_OwnedCountries(), "player", null, 1, 1, CountryState.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);

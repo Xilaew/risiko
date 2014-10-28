@@ -85,6 +85,15 @@ public interface actionFactory extends EFactory {
 	RemovePlayer createRemovePlayer();
 
 	/**
+	 * Returns a new object of class '<em>Draw Card</em>'.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @return a new object of class '<em>Draw Card</em>'.
+	 * @generated
+	 */
+	DrawCard createDrawCard();
+
+	/**
 	 * Returns the package supported by this factory.
 	 * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->

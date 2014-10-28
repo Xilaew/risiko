@@ -132,6 +132,14 @@ public class actionSwitch<T> extends Switch<T> {
 				if (result == null) result = defaultCase(theEObject);
 				return result;
 			}
+			case actionPackage.DRAW_CARD: {
+				DrawCard drawCard = (DrawCard)theEObject;
+				T result = caseDrawCard(drawCard);
+				if (result == null) result = caseInGameAction(drawCard);
+				if (result == null) result = caseAction(drawCard);
+				if (result == null) result = defaultCase(theEObject);
+				return result;
+			}
 			default: return defaultCase(theEObject);
 		}
 	}
@@ -223,6 +231,21 @@ public class actionSwitch<T> extends Switch<T> {
 	 * @generated
 	 */
 	public T caseRemovePlayer(RemovePlayer object) {
+		return null;
+	}
+
+	/**
+	 * Returns the result of interpreting the object as an instance of '<em>Draw Card</em>'.
+	 * <!-- begin-user-doc -->
+	 * This implementation returns null;
+	 * returning a non-null result will terminate the switch.
+	 * <!-- end-user-doc -->
+	 * @param object the target of the switch.
+	 * @return the result of interpreting the object as an instance of '<em>Draw Card</em>'.
+	 * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+	 * @generated
+	 */
+	public T caseDrawCard(DrawCard object) {
 		return null;
 	}
 

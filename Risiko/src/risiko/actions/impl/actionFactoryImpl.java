@@ -63,6 +63,7 @@ public class actionFactoryImpl extends EFactoryImpl implements actionFactory {
 			case actionPackage.ADD_PLAYER: return createAddPlayer();
 			case actionPackage.START_GAME: return createStartGame();
 			case actionPackage.REMOVE_PLAYER: return createRemovePlayer();
+			case actionPackage.DRAW_CARD: return createDrawCard();
 			default:
 				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
 		}
@@ -136,6 +137,16 @@ public class actionFactoryImpl extends EFactoryImpl implements actionFactory {
 	public RemovePlayer createRemovePlayer() {
 		RemovePlayerImpl removePlayer = new RemovePlayerImpl();
 		return removePlayer;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	public DrawCard createDrawCard() {
+		DrawCardImpl drawCard = new DrawCardImpl();
+		return drawCard;
 	}
 
 	/**

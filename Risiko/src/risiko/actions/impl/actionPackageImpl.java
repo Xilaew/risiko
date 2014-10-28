@@ -13,6 +13,7 @@ import risiko.actions.Action;
 import risiko.actions.AddPlayer;
 import risiko.actions.Atack;
 import risiko.actions.CoinCards;
+import risiko.actions.DrawCard;
 import risiko.actions.InGameAction;
 import risiko.actions.MoveTroops;
 import risiko.actions.RemovePlayer;
@@ -77,6 +78,13 @@ public class actionPackageImpl extends EPackageImpl implements actionPackage {
 	 * @generated
 	 */
 	private EClass removePlayerEClass = null;
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
+	private EClass drawCardEClass = null;
 
 	/**
 	 * <!-- begin-user-doc -->
@@ -299,6 +307,15 @@ public class actionPackageImpl extends EPackageImpl implements actionPackage {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
+	public EClass getDrawCard() {
+		return drawCardEClass;
+	}
+
+	/**
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @generated
+	 */
 	public EClass getMoveTroops() {
 		return moveTroopsEClass;
 	}
@@ -414,6 +431,8 @@ public class actionPackageImpl extends EPackageImpl implements actionPackage {
 
 		removePlayerEClass = createEClass(REMOVE_PLAYER);
 		createEReference(removePlayerEClass, REMOVE_PLAYER__PLAYERS);
+
+		drawCardEClass = createEClass(DRAW_CARD);
 	}
 
 	/**
@@ -456,6 +475,7 @@ public class actionPackageImpl extends EPackageImpl implements actionPackage {
 		addPlayerEClass.getESuperTypes().add(this.getAction());
 		startGameEClass.getESuperTypes().add(this.getAction());
 		removePlayerEClass.getESuperTypes().add(this.getAction());
+		drawCardEClass.getESuperTypes().add(this.getInGameAction());
 
 		// Initialize classes, features, and operations; add parameters
 		initEClass(atackEClass, Atack.class, "Atack", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -487,6 +507,8 @@ public class actionPackageImpl extends EPackageImpl implements actionPackage {
 
 		initEClass(removePlayerEClass, RemovePlayer.class, "RemovePlayer", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 		initEReference(getRemovePlayer_Players(), thestatePackage.getPlayer(), null, "players", null, 1, -1, RemovePlayer.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+		initEClass(drawCardEClass, DrawCard.class, "DrawCard", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
 
 		// Create resource
 		createResource(eNS_URI);

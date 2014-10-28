@@ -14,6 +14,10 @@ import risiko.board.Country;
  * A representation of the model object '<em><b>State</b></em>'.
  * <!-- end-user-doc -->
  *
+ * <!-- begin-model-doc -->
+ * This Class stores the actual game state. While the classes in the board package have no fields to store information such as which player owns wich country and how many troops are placed where. This class stores which players turn it is, and which actions he is allowed to do.
+ * <!-- end-model-doc -->
+ *
  * <p>
  * The following features are supported:
  * <ul>
@@ -23,6 +27,7 @@ import risiko.board.Country;
  *   <li>{@link risiko.gamestate.State#getPhase <em>Phase</em>}</li>
  *   <li>{@link risiko.gamestate.State#getState <em>State</em>}</li>
  *   <li>{@link risiko.gamestate.State#getTroopsToSet <em>Troops To Set</em>}</li>
+ *   <li>{@link risiko.gamestate.State#isConqueredCountry <em>Conquered Country</em>}</li>
  * </ul>
  * </p>
  *
@@ -175,5 +180,32 @@ public interface State extends EObject {
 	 * @generated
 	 */
 	void setTroopsToSet(int value);
+
+	/**
+	 * Returns the value of the '<em><b>Conquered Country</b></em>' attribute.
+	 * The default value is <code>"false"</code>.
+	 * <!-- begin-user-doc -->
+	 * <p>
+	 * If the meaning of the '<em>Conquered Country</em>' attribute isn't clear,
+	 * there really should be more of a description here...
+	 * </p>
+	 * <!-- end-user-doc -->
+	 * @return the value of the '<em>Conquered Country</em>' attribute.
+	 * @see #setConqueredCountry(boolean)
+	 * @see risiko.gamestate.statePackage#getState_ConqueredCountry()
+	 * @model default="false"
+	 * @generated
+	 */
+	boolean isConqueredCountry();
+
+	/**
+	 * Sets the value of the '{@link risiko.gamestate.State#isConqueredCountry <em>Conquered Country</em>}' attribute.
+	 * <!-- begin-user-doc -->
+	 * <!-- end-user-doc -->
+	 * @param value the new value of the '<em>Conquered Country</em>' attribute.
+	 * @see #isConqueredCountry()
+	 * @generated
+	 */
+	void setConqueredCountry(boolean value);
 
 } // State

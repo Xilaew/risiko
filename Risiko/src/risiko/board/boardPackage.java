@@ -20,6 +20,9 @@ import org.eclipse.emf.ecore.EReference;
  *   <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
+ * <!-- begin-model-doc -->
+ * New documentation note
+ * <!-- end-model-doc -->
  * @see risiko.board.boardFactory
  * @model kind="package"
  * @generated
