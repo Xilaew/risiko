@@ -85,14 +85,15 @@
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/Ecore/OCL">
         <details key="countryToStateMapIsAccurate" value="self.countryState->forAll(state|state.key=state.value.country)"/>
+        <details key="NoGameWithoutPlayers" value="self.players->count()>=2 or state=0"/>
       </eAnnotations>
       <eAnnotations source="http://www.eclipse.org/emf/2002/GenModel">
         <details key="documentation" value="This Class stores the actual game state. While the classes in the board package have no fields to store information such as which player owns wich country and how many troops are placed where. This class stores which players turn it is, and which actions he is allowed to do."/>
       </eAnnotations>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="players" lowerBound="1"
-          upperBound="-1" eType="#//gamestate/Player" containment="true"/>
-      <eStructuralFeatures xsi:type="ecore:EReference" name="countryState" lowerBound="1"
-          upperBound="-1" eType="#//gamestate/CountryToCountryStateMap" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="players" upperBound="-1"
+          eType="#//gamestate/Player" containment="true"/>
+      <eStructuralFeatures xsi:type="ecore:EReference" name="countryState" upperBound="-1"
+          eType="#//gamestate/CountryToCountryStateMap" containment="true"/>
       <eStructuralFeatures xsi:type="ecore:EReference" name="turn" eType="#//gamestate/Player"
           resolveProxies="false"/>
       <eStructuralFeatures xsi:type="ecore:EAttribute" name="phase" eType="#//gamestate/TurnPhase"/>

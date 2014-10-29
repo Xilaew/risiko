@@ -83,6 +83,7 @@ public class GameMonitor {
 	}
 
 	protected ResourceSet initializeResourceSet() {
+
 		// Create a resource set to hold the resources.
 		ResourceSet resourceSet = new ResourceSetImpl();
 
@@ -224,7 +225,7 @@ public class GameMonitor {
 	}
 
 	public void setState(State state) {
-		validate(state);
+		//validate(state);
 		this.state = state;
 		stateResource.getContents().clear();
 		stateResource.getContents().add(this.state);

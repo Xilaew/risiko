@@ -138,7 +138,7 @@ public class stateValidator extends EObjectValidator {
 	 * <!-- end-user-doc -->
 	 * @generated
 	 */
-	protected static final String STATE__COUNTRY_TO_STATE_MAP_IS_ACCURATE__EEXPRESSION = "self.countryState->forAll(state|state.key=state.value.country)";
+	protected static final String STATE__COUNTRY_TO_STATE_MAP_IS_ACCURATE__EEXPRESSION = "true";
 
 	/**
 	 * Validates the countryToStateMapIsAccurate constraint of '<em>State</em>'.

@@ -33,7 +33,7 @@ import risiko.board.Country;
  *
  * @see risiko.gamestate.statePackage#getState()
  * @model annotation="http://www.eclipse.org/emf/2002/Ecore constraints='countryToStateMapIsAccurate'"
- *        annotation="http://www.eclipse.org/emf/2002/Ecore/OCL countryToStateMapIsAccurate='self.countryState->forAll(state|state.key=state.value.country)'"
+ *        annotation="http://www.eclipse.org/emf/2002/Ecore/OCL countryToStateMapIsAccurate='true'"
  * @generated
  */
 public interface State extends EObject {
@@ -48,7 +48,7 @@ public interface State extends EObject {
 	 * <!-- end-user-doc -->
 	 * @return the value of the '<em>Players</em>' containment reference list.
 	 * @see risiko.gamestate.statePackage#getState_Players()
-	 * @model containment="true" required="true"
+	 * @model containment="true"
 	 * @generated
 	 */
 	EList<Player> getPlayers();
