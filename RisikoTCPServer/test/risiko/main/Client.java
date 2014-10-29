@@ -42,6 +42,7 @@ public class Client implements Runnable {
 			ap1.getPlayers().add(p);
 			p = stateFactory.eINSTANCE.createPlayer();
 			AddPlayer ap2 = actionFactory.eINSTANCE.createAddPlayer();
+			p = stateFactory.eINSTANCE.createPlayer();
 			p.setName("newPlayer");
 			ap2.getPlayers().add(p);
 			EList<EObject> actions = game.getActionResource().getContents();
@@ -49,18 +50,20 @@ public class Client implements Runnable {
 			actions.add(ap1);
 			s.configureBlocking(true);
 			ap1.eResource().save(s.socket().getOutputStream(), null);
+			s.socket().getOutputStream().write('\0');
+			s.socket().getOutputStream().flush();
 
 			read();
 
 			System.out.println();
 			game.getState(System.out);
 
-			// s.socket().getOutputStream().write(0);
 			actions.clear();
 			actions.add(ap2);
+			s.configureBlocking(true);
 			ap2.eResource().save(s.socket().getOutputStream(), null);
-			s.socket().getOutputStream().write(0);
-			s.configureBlocking(false);
+			s.socket().getOutputStream().write('\0');
+			s.socket().getOutputStream().flush();
 
 			read();
 
@@ -102,6 +105,9 @@ public class Client implements Runnable {
 			current = msg.substring(0, i);
 			msg = msg.substring(i + 1);
 			try {
+				System.out.println();
+				System.out.println("new State:");
+				System.out.println(current);
 				game.parseAndHandle(new ByteArrayInputStream(current.getBytes()));
 			} catch (Exception e) {
 				e.printStackTrace();

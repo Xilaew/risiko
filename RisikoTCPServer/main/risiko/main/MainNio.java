@@ -100,12 +100,26 @@ public class MainNio implements Runnable {
 
 			System.out.println(info);
 			String msg = sb.toString();
-			if (msg.length() > 1) {
-				ByteArrayOutputStream out = new ByteArrayOutputStream();
-				ByteArrayInputStream in = new ByteArrayInputStream(sb
-						.toString().getBytes());
-				engine.executeAction(in, out);
-				broadcast(ByteBuffer.wrap(out.toByteArray()));
+			int i;
+			String current;
+			while ((i = msg.indexOf('\0')) >= 0) {
+				current = msg.substring(0, i);
+				msg = msg.substring(i + 1);
+				try {
+					if (current.length()>1) {
+						ByteArrayOutputStream out = new ByteArrayOutputStream();
+						ByteArrayInputStream in = new ByteArrayInputStream(
+								current.getBytes());
+						engine.executeAction(in, out);
+						System.out.println(out.toString());
+						if (out.size() > 1) {
+							out.write("\0".getBytes());
+							broadcast(ByteBuffer.wrap(out.toByteArray()));
+						}
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (IOException e) {
 			key.cancel();

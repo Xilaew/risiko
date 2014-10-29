@@ -138,7 +138,9 @@ public class Engine {
 				this.executor = ExecutorFactory.getExecutor(this.board,
 						this.state);
 			}
-			executor.execute(action);
+			if (executor.execute(action) != null) {
+				stateResource.save(out, null);
+			}
 		}
 	}
 
