@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="create_run_jar" name="Create Runnable Jar for Project RisikoTCPServer with Jar-in-Jar Loader">
+    <!--this file was created by Eclipse Runnable JAR Export Wizard-->
+    <!--ANT 1.7 is required                                        -->
+    <target name="create_run_jar">
+        <jar destfile="C:/Dokumente und Einstellungen/xilaew/git/risiko/RisikoTCPServer/risiko.jar">
+            <manifest>
+                <attribute name="Main-Class" value="org.eclipse.jdt.internal.jarinjarloader.JarRsrcLoader"/>
+                <attribute name="Rsrc-Main-Class" value="risiko.main.MainNio"/>
+                <attribute name="Class-Path" value="."/>
+                <attribute name="Rsrc-Class-Path" value="./ org.eclipse.core.runtime_3.10.0.v20140318-2214.jar javax.annotation_1.2.0.v201401042248.jar javax.inject_1.0.0.v20091030.jar org.eclipse.osgi_3.10.0.v20140606-1445.jar javax.transaction_1.1.1.v201105210645.jar org.eclipse.osgi.compatibility.state_1.0.0.v20140403-1907.jar org.eclipse.equinox.common_3.6.200.v20130402-1505.jar org.eclipse.core.jobs_3.6.0.v20140424-0053.jar runtime_registry_compatibility.jar org.eclipse.equinox.registry_3.5.400.v20140428-1507.jar org.eclipse.equinox.preferences_3.5.200.v20140224-1527.jar org.eclipse.core.contenttype_3.4.200.v20140207-1251.jar org.eclipse.equinox.app_1.3.200.v20130910-1609.jar org.eclipse.emf.ecore_2.10.0.v20140514-1158.jar org.eclipse.emf.common_2.10.0.v20140514-1158.jar org.eclipse.emf.ecore.xmi_2.10.0.v20140514-1158.jar org.eclipse.ocl.ecore_3.3.100.v20140524-1358.jar org.eclipse.ocl_3.4.0.v20140524-1358.jar lpg.runtime.java_2.0.17.v201004271640.jar org.eclipse.ocl.common_1.2.0.v20140528-1458.jar"/>
+            </manifest>
+            <zipfileset src="jar-in-jar-loader.zip"/>
+            <fileset dir="C:/Dokumente und Einstellungen/xilaew/git/risiko/RisikoTCPServer/bin"/>
+            <fileset dir="C:/Dokumente und Einstellungen/xilaew/git/risiko/Risiko/bin"/>
+            <zipfileset dir="C:\Programme\eclipse\plugins" includes="org.eclipse.core.runtime_3.10.0.v20140318-2214.jar"/>
+            <zipfileset dir="C:\Programme\eclipse\plugins" includes="javax.annotation_1.2.0.v201401042248.jar"/>
+            <zipfileset dir="C:\Programme\eclipse\plugins" includes="javax.inject_1.0.0.v20091030.jar"/>
+            <zipfileset dir="C:\Programme\eclipse\plugins" includes="org.eclipse.osgi_3.10.0.v20140606-1445.jar"/>
+            <zipfileset dir="C:\Programme\eclipse\plugins" includes="javax.transaction_1.1.1.v201105210645.jar"/>
+            <zipfileset dir="C:\Programme\eclipse\plugins" includes="org.eclipse.osgi.compatibility.state_1.0.0.v20140403-1907.jar"/>
+            <zipfileset dir="C:\Programme\eclipse\plugins" includes="org.eclipse.equinox.common_3.6.200.v20130402-1505.jar"/>
+            <zipfileset dir="C:\Programme\eclipse\plugins" includes="org.eclipse.core.jobs_3.6.0.v20140424-0053.jar"/>
+            <zipfileset dir="C:\Programme\eclipse\plugins\org.eclipse.core.runtime.compatibility.registry_3.5.300.v20140128-0851" includes="runtime_registry_compatibility.jar"/>
+            <zipfileset dir="C:\Programme\eclipse\plugins" includes="org.eclipse.equinox.registry_3.5.400.v20140428-1507.jar"/>
+            <zipfileset dir="C:\Programme\eclipse\plugins" includes="org.eclipse.equinox.preferences_3.5.200.v20140224-1527.jar"/>
+            <zipfileset dir="C:\Programme\eclipse\plugins" includes="org.eclipse.core.contenttype_3.4.200.v20140207-1251.jar"/>
+            <zipfileset dir="C:\Programme\eclipse\plugins" includes="org.eclipse.equinox.app_1.3.200.v20130910-1609.jar"/>
+            <zipfileset dir="C:\Programme\eclipse\plugins" includes="org.eclipse.emf.ecore_2.10.0.v20140514-1158.jar"/>
+            <zipfileset dir="C:\Programme\eclipse\plugins" includes="org.eclipse.emf.common_2.10.0.v20140514-1158.jar"/>
+            <zipfileset dir="C:\Programme\eclipse\plugins" includes="org.eclipse.emf.ecore.xmi_2.10.0.v20140514-1158.jar"/>
+            <zipfileset dir="C:\Programme\eclipse\plugins" includes="org.eclipse.ocl.ecore_3.3.100.v20140524-1358.jar"/>
+            <zipfileset dir="C:\Programme\eclipse\plugins" includes="org.eclipse.ocl_3.4.0.v20140524-1358.jar"/>
+            <zipfileset dir="C:\Programme\eclipse\plugins" includes="lpg.runtime.java_2.0.17.v201004271640.jar"/>
+            <zipfileset dir="C:\Programme\eclipse\plugins" includes="org.eclipse.ocl.common_1.2.0.v20140528-1458.jar"/>
+        </jar>
+    </target>
+</project>

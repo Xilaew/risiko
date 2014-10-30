@@ -65,20 +65,23 @@ public class MainNio implements Runnable {
 				.toString())).append(":").append(sc.socket().getPort())
 				.toString();
 		sc.configureBlocking(false);
-		sc.register(selector, SelectionKey.OP_READ, address);
+		ClientState cs = new ClientState(address);
+		sc.register(selector, SelectionKey.OP_READ, cs);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		engine.getBoard(out);
-		out.write("\0".getBytes());
+		out.write('\0');
 		engine.getState(out);
-		out.write("\0".getBytes());
+		out.write('\0');
 		sc.write(ByteBuffer.wrap(out.toByteArray()));
-		// engine.getState(sc.socket().getOutputStream());
 		System.out.println("accepted connection from: " + address);
 	}
 
 	private void handleRead(SelectionKey key) {
 		SocketChannel ch = (SocketChannel) key.channel();
+		ClientState cs = (ClientState) key.attachment();
 		StringBuilder sb = new StringBuilder();
+
+		sb.append(cs.getBuffer());
 
 		buf.clear();
 		int read = 0;
@@ -90,32 +93,31 @@ public class MainNio implements Runnable {
 				sb.append(new String(bytes));
 				buf.clear();
 			}
-			String info;
 			if (read < 0) {
-				info = key.attachment() + " left the chat.\n";
+				System.out.println(key.attachment() + " left the chat.\n");
 				ch.close();
-			} else {
-				info = key.attachment() + ": " + sb.toString();
 			}
-
-			System.out.println(info);
 			String msg = sb.toString();
+
 			int i;
 			String current;
+			String info;
 			while ((i = msg.indexOf('\0')) >= 0) {
 				current = msg.substring(0, i);
 				msg = msg.substring(i + 1);
 				try {
-					if (current.length()>1) {
-						ByteArrayOutputStream out = new ByteArrayOutputStream();
-						ByteArrayInputStream in = new ByteArrayInputStream(
-								current.getBytes());
-						engine.executeAction(in, out);
-						System.out.println(out.toString());
-						if (out.size() > 1) {
-							out.write("\0".getBytes());
-							broadcast(ByteBuffer.wrap(out.toByteArray()));
-						}
+					info = key.attachment() + ": " + sb.toString();
+
+					System.out.println(info);
+
+					ByteArrayOutputStream out = new ByteArrayOutputStream();
+					ByteArrayInputStream in = new ByteArrayInputStream(
+							current.getBytes());
+					engine.executeAction(in, out);
+					System.out.println(out.toString());
+					if (out.size() > 1) {
+						out.write('\0');
+						broadcast(ByteBuffer.wrap(out.toByteArray()));
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
