@@ -82,9 +82,8 @@ public class Client implements Runnable {
 
 	private void read() throws IOException {
 		s.configureBlocking(true);
-		int read;
 		StringBuilder sb = new StringBuilder();
-		while ((read = s.read(buf)) > 0) {
+		while ((s.read(buf)) > 0) {
 			s.configureBlocking(false);
 			buf.flip();
 			byte[] bytes = new byte[buf.limit()];
@@ -92,22 +91,14 @@ public class Client implements Runnable {
 			sb.append(new String(bytes));
 			buf.clear();
 		}
-		String msg;
-		if (read < 0) {
-			msg = "connection closed left the chat.\n";
-			s.close();
-		} else {
-			msg = sb.toString();
-		}
+		String msg = sb.toString();
+		System.out.println(msg);
 		int i;
 		String current;
 		while ((i = msg.indexOf('\0')) >= 0) {
 			current = msg.substring(0, i);
 			msg = msg.substring(i + 1);
 			try {
-				System.out.println();
-				System.out.println("new State:");
-				System.out.println(current);
 				game.parseAndHandle(new ByteArrayInputStream(current.getBytes()));
 			} catch (Exception e) {
 				e.printStackTrace();

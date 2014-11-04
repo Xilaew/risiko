@@ -93,35 +93,33 @@ public class MainNio implements Runnable {
 				sb.append(new String(bytes));
 				buf.clear();
 			}
-			if (read < 0) {
-				System.out.println(key.attachment() + " left the chat.\n");
-				ch.close();
-			}
-			String msg = sb.toString();
 
+			String msg = sb.toString();
 			int i;
 			String current;
-			String info;
 			while ((i = msg.indexOf('\0')) >= 0) {
 				current = msg.substring(0, i);
 				msg = msg.substring(i + 1);
 				try {
-					info = key.attachment() + ": " + sb.toString();
 
-					System.out.println(info);
+					System.out.println(cs.getName() + ":" + current);
 
 					ByteArrayOutputStream out = new ByteArrayOutputStream();
 					ByteArrayInputStream in = new ByteArrayInputStream(
 							current.getBytes());
 					engine.executeAction(in, out);
+
 					System.out.println(out.toString());
-					if (out.size() > 1) {
-						out.write('\0');
-						broadcast(ByteBuffer.wrap(out.toByteArray()));
-					}
+
+					out.write('\0');
+					broadcast(ByteBuffer.wrap(out.toByteArray()));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+			}
+			if (read < 0) {
+				System.out.println(cs.getName() + " left the chat.\n");
+				ch.close();
 			}
 		} catch (IOException e) {
 			key.cancel();

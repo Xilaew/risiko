@@ -142,6 +142,7 @@ public class Engine {
 				stateResource.save(out, null);
 			}
 		}
+		actionResource.unload();
 	}
 
 	/**
