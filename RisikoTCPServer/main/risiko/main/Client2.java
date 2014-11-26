@@ -3,26 +3,34 @@ package risiko.main;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.nio.ByteBuffer;
 import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
+import java.util.Iterator;
 
-import risiko.Engine;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
+
 import risiko.GameMonitor;
+import risiko.actions.AddPlayer;
+import risiko.actions.actionFactory;
+import risiko.gamestate.Player;
+import risiko.gamestate.stateFactory;
 
-public class Client2 implements Runnable{
+public class Client2 implements Runnable {
 	private Selector selector;
 	SocketChannel s;
 	private ByteBuffer buf = ByteBuffer.allocate(256);
 	private GameMonitor game = new GameMonitor();
+	private static final int PORT = 10523;
+
+	private ByteBuffer toSend = null;
 
 	public static void main(String[] args) {
-		SocketAddress addr = new InetSocketAddress("localhost", 10523);
+		SocketAddress addr = new InetSocketAddress("localhost", PORT);
 		try {
 			new Client2(addr).run();
 		} catch (IOException e) {
@@ -34,9 +42,9 @@ public class Client2 implements Runnable{
 	Client2(SocketAddress address) throws IOException {
 		this.selector = Selector.open();
 		this.s = SocketChannel.open(address);
+		s.configureBlocking(false);
 		ClientState cs = new ClientState("Client");
 		this.s.register(this.selector, SelectionKey.OP_READ, cs);
-		this.s.register(selector, SelectionKey.OP_WRITE);
 	}
 
 	private void handleRead(SelectionKey key) {
@@ -64,18 +72,12 @@ public class Client2 implements Runnable{
 				current = msg.substring(0, i);
 				msg = msg.substring(i + 1);
 				try {
-
 					System.out.println(cs.getName() + ":" + current);
 
-					ByteArrayOutputStream out = new ByteArrayOutputStream();
 					ByteArrayInputStream in = new ByteArrayInputStream(
 							current.getBytes());
-					engine.executeAction(in, out);
+					game.parseAndHandle(in);
 
-					System.out.println(out.toString());
-
-					out.write('\0');
-					broadcast(ByteBuffer.wrap(out.toByteArray()));
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -92,7 +94,79 @@ public class Client2 implements Runnable{
 
 	@Override
 	public void run() {
-		// TODO Auto-generated method stub
+		try {
+			System.out.println("Client connecting on port " + PORT);
+
+			Iterator<SelectionKey> iter;
+			SelectionKey key;
+			while (this.s.isOpen()) {
+				selector.select();
+				iter = this.selector.selectedKeys().iterator();
+				while (iter.hasNext()) {
+					key = iter.next();
+					iter.remove();
+					if (key.isReadable())
+						this.handleRead(key);
+					if (key.isWritable())
+						this.handleWrite(key);
+				}
+				//TODO send after receiving
+			}
+			System.out.println("received both!");
+		} catch (IOException e) {
+			System.out.println("IOException, server of port " + PORT
+					+ " terminating. Stack trace:");
+			e.printStackTrace();
+		}
+	}
+
+	private void handleWrite(SelectionKey key) {
+		SocketChannel ch = (SocketChannel) key.channel();
+		ClientState cs = (ClientState) key.attachment();
+
+		int written = 0;
+		try {
+			while ((written = ch.write(toSend)) > 0) {
+			}
+			if (toSend.hasRemaining()) {
+
+			} else {
+				toSend = null;
+				key.interestOps(SelectionKey.OP_READ);
+			}
+			if (written < 0) {
+				System.out.println(cs.getName() + " left the chat.\n");
+				ch.close();
+			}
+		} catch (IOException e) {
+			key.cancel();
+			e.printStackTrace();
+		}
+		key.interestOps(SelectionKey.OP_READ);
+	}
+	
+	private void addPlayers() throws IOException{
 		
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		// Add two new Players
+		AddPlayer ap1 = actionFactory.eINSTANCE.createAddPlayer();
+		Player p = stateFactory.eINSTANCE.createPlayer();
+		p.setName("xilaew");
+		ap1.getPlayers().add(p);
+		p = stateFactory.eINSTANCE.createPlayer();
+		AddPlayer ap2 = actionFactory.eINSTANCE.createAddPlayer();
+		p = stateFactory.eINSTANCE.createPlayer();
+		p.setName("newPlayer");
+		ap2.getPlayers().add(p);
+		EList<EObject> actions = game.getActionResource().getContents();
+		actions.clear();
+		actions.add(ap1);
+		ap1.eResource().save(out, null);
+		out.write('\0');
+		actions.clear();
+		actions.add(ap2);
+		ap2.eResource().save(out, null);
+		out.write('\0');
+		toSend = ByteBuffer.wrap(out.toByteArray());
 	}
 }
