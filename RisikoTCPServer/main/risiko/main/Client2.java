@@ -16,6 +16,7 @@ import org.eclipse.emf.ecore.EObject;
 
 import risiko.GameMonitor;
 import risiko.actions.AddPlayer;
+import risiko.actions.StartGame;
 import risiko.actions.actionFactory;
 import risiko.gamestate.Player;
 import risiko.gamestate.stateFactory;
@@ -26,7 +27,8 @@ public class Client2 implements Runnable {
 	private ByteBuffer buf = ByteBuffer.allocate(256);
 	private GameMonitor game = new GameMonitor();
 	private static final int PORT = 10523;
-	private boolean sent = false; 
+	private boolean sent = false;
+	private boolean started = false;
 
 	public static void main(String[] args) {
 		SocketAddress addr = new InetSocketAddress("localhost", PORT);
@@ -72,7 +74,7 @@ public class Client2 implements Runnable {
 				msg = msg.substring(i + 1);
 				try {
 					System.out.println(cs.getName() + ":" + current);
-					//System.out.flush();
+					// System.out.flush();
 
 					ByteArrayInputStream in = new ByteArrayInputStream(
 							current.getBytes());
@@ -112,14 +114,18 @@ public class Client2 implements Runnable {
 						this.handleRead(key);
 					if (key.isWritable())
 						this.handleWrite(key);
-					if (game.getState()!=null && !sent){
-						sent=true;
+					if (game.getState() != null && !sent) {
+						sent = true;
 						addPlayers(key);
+					}					
+					if (game.getState() != null && game.getState().getPlayers().size()==2 && !started) {
+						started = true;
+						startGame(key);
 					}
 				}
-				System.out.println("state:"+game.getState());
-				//System.out.flush();
-				//TODO send after receiving
+				System.out.println("state:" + game.getState());
+				// System.out.flush();
+				// TODO send after receiving
 			}
 			System.out.println("received both!");
 		} catch (IOException e) {
@@ -133,7 +139,6 @@ public class Client2 implements Runnable {
 		SocketChannel ch = (SocketChannel) key.channel();
 		ClientState cs = (ClientState) key.attachment();
 		ByteBuffer toSend = ByteBuffer.wrap(cs.getOutputBuffer().getBytes());
-		
 
 		int written = 0;
 		try {
@@ -154,8 +159,8 @@ public class Client2 implements Runnable {
 			e.printStackTrace();
 		}
 	}
-	
-	private void addPlayers(SelectionKey key) throws IOException{
+
+	private void addPlayers(SelectionKey key) throws IOException {
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		// Add two new Players
 		AddPlayer ap1 = actionFactory.eINSTANCE.createAddPlayer();
@@ -176,7 +181,20 @@ public class Client2 implements Runnable {
 		actions.add(ap2);
 		ap2.eResource().save(out, null);
 		out.write('\0');
-		((ClientState)key.attachment()).setOutputBuffer(out.toString());
-		key.interestOps(SelectionKey.OP_READ|SelectionKey.OP_WRITE);
+		((ClientState) key.attachment()).setOutputBuffer(out.toString());
+		key.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+	}
+
+	private void startGame(SelectionKey key) throws IOException {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		// Add two new Players
+		StartGame action = actionFactory.eINSTANCE.createStartGame();
+		EList<EObject> actions = game.getActionResource().getContents();
+		actions.clear();
+		actions.add(action);
+		action.eResource().save(out, null);
+		out.write('\0');
+		((ClientState) key.attachment()).setOutputBuffer(out.toString());
+		key.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
 	}
 }
