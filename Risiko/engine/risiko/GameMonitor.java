@@ -51,9 +51,9 @@ public class GameMonitor {
 		actionResource = resourceSet.createResource(URI
 				.createURI("http:///Risiko.action"));
 		inputResource = resourceSet.createResource(URI.createURI("input"));
-		this.state = stateFactory.eINSTANCE.createState();
-		state.setState(GameState.ACCEPTING_PLAYERS);
-		stateResource.getContents().add(this.state);
+//		this.state = stateFactory.eINSTANCE.createState();
+//		state.setState(GameState.ACCEPTING_PLAYERS);
+//		stateResource.getContents().add(this.state);
 	}
 
 	public void validate(EObject object) {

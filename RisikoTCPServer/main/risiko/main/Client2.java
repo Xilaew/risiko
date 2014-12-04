@@ -26,8 +26,7 @@ public class Client2 implements Runnable {
 	private ByteBuffer buf = ByteBuffer.allocate(256);
 	private GameMonitor game = new GameMonitor();
 	private static final int PORT = 10523;
-
-	private ByteBuffer toSend = null;
+	private boolean sent = false; 
 
 	public static void main(String[] args) {
 		SocketAddress addr = new InetSocketAddress("localhost", PORT);
@@ -43,7 +42,7 @@ public class Client2 implements Runnable {
 		this.selector = Selector.open();
 		this.s = SocketChannel.open(address);
 		s.configureBlocking(false);
-		ClientState cs = new ClientState("Client");
+		ClientState cs = new ClientState("Server");
 		this.s.register(this.selector, SelectionKey.OP_READ, cs);
 	}
 
@@ -73,6 +72,7 @@ public class Client2 implements Runnable {
 				msg = msg.substring(i + 1);
 				try {
 					System.out.println(cs.getName() + ":" + current);
+					//System.out.flush();
 
 					ByteArrayInputStream in = new ByteArrayInputStream(
 							current.getBytes());
@@ -80,11 +80,14 @@ public class Client2 implements Runnable {
 
 				} catch (Exception e) {
 					e.printStackTrace();
+					System.err.flush();
 				}
 			}
 			if (read < 0) {
 				System.out.println(cs.getName() + " left the chat.\n");
 				ch.close();
+			} else {
+				cs.setBuffer(msg);
 			}
 		} catch (IOException e) {
 			key.cancel();
@@ -109,7 +112,13 @@ public class Client2 implements Runnable {
 						this.handleRead(key);
 					if (key.isWritable())
 						this.handleWrite(key);
+					if (game.getState()!=null && !sent){
+						sent=true;
+						addPlayers(key);
+					}
 				}
+				System.out.println("state:"+game.getState());
+				//System.out.flush();
 				//TODO send after receiving
 			}
 			System.out.println("received both!");
@@ -123,13 +132,15 @@ public class Client2 implements Runnable {
 	private void handleWrite(SelectionKey key) {
 		SocketChannel ch = (SocketChannel) key.channel();
 		ClientState cs = (ClientState) key.attachment();
+		ByteBuffer toSend = ByteBuffer.wrap(cs.getOutputBuffer().getBytes());
+		
 
 		int written = 0;
 		try {
 			while ((written = ch.write(toSend)) > 0) {
 			}
 			if (toSend.hasRemaining()) {
-
+				cs.setOutputBuffer(toSend.compact().toString());
 			} else {
 				toSend = null;
 				key.interestOps(SelectionKey.OP_READ);
@@ -142,11 +153,9 @@ public class Client2 implements Runnable {
 			key.cancel();
 			e.printStackTrace();
 		}
-		key.interestOps(SelectionKey.OP_READ);
 	}
 	
-	private void addPlayers() throws IOException{
-		
+	private void addPlayers(SelectionKey key) throws IOException{
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		// Add two new Players
 		AddPlayer ap1 = actionFactory.eINSTANCE.createAddPlayer();
@@ -167,6 +176,7 @@ public class Client2 implements Runnable {
 		actions.add(ap2);
 		ap2.eResource().save(out, null);
 		out.write('\0');
-		toSend = ByteBuffer.wrap(out.toByteArray());
+		((ClientState)key.attachment()).setOutputBuffer(out.toString());
+		key.interestOps(SelectionKey.OP_READ|SelectionKey.OP_WRITE);
 	}
 }

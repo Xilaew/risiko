@@ -120,6 +120,8 @@ public class MainNio implements Runnable {
 			if (read < 0) {
 				System.out.println(cs.getName() + " left the chat.\n");
 				ch.close();
+			} else {
+				cs.setBuffer(msg);
 			}
 		} catch (IOException e) {
 			key.cancel();

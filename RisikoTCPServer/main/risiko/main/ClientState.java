@@ -3,7 +3,8 @@ package risiko.main;
 public class ClientState {
 	
 	private final String name;
-	private String buffer = "";
+	private String inputBuffer = "";
+	private String outputBuffer = "";
 	
 	ClientState(String name){
 		this.name=name;
@@ -14,14 +15,22 @@ public class ClientState {
 	}
 
 	String getBuffer() {
-		return buffer;
+		return inputBuffer;
 	}
 
 	void setBuffer(String buffer) {
 		if (buffer==null){
 			throw new IllegalArgumentException("buffer may not be null; enter an empty String instead");
 		}
-		this.buffer = buffer;
+		this.inputBuffer = buffer;
+	}
+
+	public String getOutputBuffer() {
+		return outputBuffer;
+	}
+
+	public void setOutputBuffer(String outputBuffer) {
+		this.outputBuffer = outputBuffer;
 	}
 	
 }
