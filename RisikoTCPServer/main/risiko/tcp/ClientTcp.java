@@ -9,8 +9,12 @@ import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ClientTcp implements Runnable {
+	private static final Logger LOG = Logger.getLogger(ClientTcp.class
+			.getName());
 	protected static final int DEFAULT_PORT = 10523;
 	protected static final String DEFAULT_IP = "localhost";
 	protected SocketAddress serverAdress;
@@ -62,22 +66,23 @@ public class ClientTcp implements Runnable {
 			while ((i = msg.indexOf('\0')) >= 0) {
 				current = msg.substring(0, i);
 				msg = msg.substring(i + 1);
-				System.out.println(cs.getName() + ":" + current);
-				synchronized (listeners){
-					for (TcpListener listener : listeners){
-						listener.handleIncomming(current);
+				LOG.log(Level.INFO, cs.getName() + ":" + current);
+				synchronized (listeners) {
+					for (TcpListener listener : listeners) {
+						listener.handleIncomming(current, key);
 					}
 				}
 			}
 			if (read < 0) {
-				System.out.println(cs.getName() + " left the chat.\n");
+				LOG.log(Level.INFO, cs.getName() + " left the chat.\n");
 				ch.close();
 			} else {
 				cs.setBuffer(msg);
 			}
 		} catch (IOException e) {
 			key.cancel();
-			e.printStackTrace();
+			LOG.log(Level.WARNING, "IOException, " + serverAdress.toString()
+					+ " terminated the connection.", e);
 		}
 	}
 
@@ -89,8 +94,8 @@ public class ClientTcp implements Runnable {
 			s.configureBlocking(false);
 			ClientState cs = new ClientState(serverAdress.toString());
 			s.register(selector, SelectionKey.OP_READ, cs);
-			System.out.println("Client connecting to Server: "
-					+ serverAdress.toString());
+			LOG.log(Level.INFO,
+					"Client connecting to Server: " + serverAdress.toString());
 
 			Iterator<SelectionKey> iter;
 			SelectionKey key;
@@ -107,9 +112,9 @@ public class ClientTcp implements Runnable {
 				}
 			}
 		} catch (IOException e) {
-			System.out.println("IOException, server of port " + DEFAULT_PORT
-					+ " terminating. Stack trace:");
-			e.printStackTrace();
+			LOG.log(Level.WARNING,
+					"IOException, connection to " + serverAdress.toString()
+							+ " could not be established.", e);
 		}
 	}
 
@@ -129,12 +134,26 @@ public class ClientTcp implements Runnable {
 				key.interestOps(SelectionKey.OP_READ);
 			}
 			if (written < 0) {
-				System.out.println(cs.getName() + " left the chat.\n");
+				LOG.log(Level.INFO, cs.getName() + " left the chat.\n");
 				ch.close();
 			}
 		} catch (IOException e) {
 			key.cancel();
-			e.printStackTrace();
+			LOG.log(Level.WARNING, "IOException, " + serverAdress.toString()
+					+ " terminated the connection.", e);
 		}
+	}
+
+	public boolean send(String message, SelectionKey key) {
+		synchronized (key) {
+			ClientState cs = (ClientState) key.attachment();
+			StringBuilder sb = new StringBuilder();
+			sb.append(cs.getOutputBuffer());
+			sb.append(message);
+			sb.append('\0');
+			cs.setOutputBuffer(sb.toString());
+			key.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+		}
+		return true;
 	}
 }

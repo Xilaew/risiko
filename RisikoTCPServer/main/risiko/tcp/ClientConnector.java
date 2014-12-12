@@ -1,7 +1,9 @@
 package risiko.tcp;
 
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.channels.SelectionKey;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,7 +25,7 @@ public class ClientConnector implements Runnable, TcpListener {
 	protected GameMonitor game;
 	protected ClientTcp tcp;
 
-	ClientConnector() {
+	public ClientConnector() {
 		game = new GameMonitor();
 		tcp = new ClientTcp();
 	}
@@ -79,9 +81,11 @@ public class ClientConnector implements Runnable, TcpListener {
 		this.game = game;
 	}
 
-	public boolean send(EObject object) {
-		// TODO implement
-		return false;
+	public boolean send(EObject object, SelectionKey key) {
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		game.serialize(object, out);
+		tcp.send(out.toString(), key);
+		return true;
 	}
 
 	@Override
@@ -91,14 +95,14 @@ public class ClientConnector implements Runnable, TcpListener {
 	}
 
 	@Override
-	public void handleIncomming(String message) {
+	public void handleIncomming(String message, SelectionKey key) {
 		ByteArrayInputStream in = new ByteArrayInputStream(message.getBytes());
 		try {
 			List<EObject> objects = game.parseAndHandle(in);
 			synchronized (listeners){
 				for (ConnectorListener l : listeners){
 					for (EObject o : objects){
-						l.handleIncomming(o);
+						l.handleIncomming(o, key);
 					}
 				}
 			}
@@ -109,7 +113,7 @@ public class ClientConnector implements Runnable, TcpListener {
 	}
 
 	@Override
-	public void handleOutgoing(String message) {
+	public void handleOutgoing(String message, SelectionKey key) {
 		// Do nothing.
 	}
 }

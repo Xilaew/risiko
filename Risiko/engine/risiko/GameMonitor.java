@@ -6,6 +6,8 @@ import java.io.OutputStream;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.URI;
@@ -24,6 +26,8 @@ import risiko.gamestate.State;
 import risiko.gamestate.statePackage;
 
 public class GameMonitor {
+	private static final Logger LOG = Logger.getLogger(GameMonitor.class
+			.getName());
 
 	private Board board;
 	private State state;
@@ -50,9 +54,9 @@ public class GameMonitor {
 		actionResource = resourceSet.createResource(URI
 				.createURI("http:///Risiko.action"));
 		inputResource = resourceSet.createResource(URI.createURI("input"));
-//		this.state = stateFactory.eINSTANCE.createState();
-//		state.setState(GameState.ACCEPTING_PLAYERS);
-//		stateResource.getContents().add(this.state);
+		// this.state = stateFactory.eINSTANCE.createState();
+		// state.setState(GameState.ACCEPTING_PLAYERS);
+		// stateResource.getContents().add(this.state);
 	}
 
 	public void validate(EObject object) {
@@ -198,7 +202,7 @@ public class GameMonitor {
 
 	public List<EObject> parseAndHandle(InputStream in) throws IOException {
 		inputResource.load(in, null);
-		LinkedList<EObject> result = new LinkedList<EObject> ();
+		LinkedList<EObject> result = new LinkedList<EObject>();
 		while (!inputResource.getContents().isEmpty()) {
 			EObject o = inputResource.getContents().get(0);
 			if (o instanceof Board) {
@@ -213,14 +217,13 @@ public class GameMonitor {
 		inputResource.unload();
 		return result;
 	}
-	
-	public void serialize(EObject in, OutputStream out){
+
+	public void serialize(EObject in, OutputStream out) {
 		inputResource.getContents().add(in);
 		try {
 			inputResource.save(out, null);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.log(Level.WARNING, "failed serialize object.", e);
 		}
 		inputResource.unload();
 	}
@@ -241,8 +244,8 @@ public class GameMonitor {
 	}
 
 	public void setState(State state) {
-		//XXX validation commented out for debugging
-		//validate(state);
+		// XXX validation commented out for debugging
+		// validate(state);
 		this.state = state;
 		stateResource.getContents().clear();
 		stateResource.getContents().add(this.state);

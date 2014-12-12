@@ -3,6 +3,8 @@
  */
 package risiko.tcp;
 
+import java.nio.channels.SelectionKey;
+
 
 /**
  * @author xilaew
@@ -10,8 +12,8 @@ package risiko.tcp;
  */
 public interface TcpListener {
 
-	public void handleIncomming(String message);
+	public void handleIncomming(String message, SelectionKey key);
 
-	public void handleOutgoing(String message);
+	public void handleOutgoing(String message, SelectionKey key);
 
 }
