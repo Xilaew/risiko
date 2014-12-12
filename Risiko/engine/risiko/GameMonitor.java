@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.emf.common.util.Diagnostic;
@@ -19,9 +20,7 @@ import risiko.actions.Action;
 import risiko.actions.actionPackage;
 import risiko.board.Board;
 import risiko.board.boardPackage;
-import risiko.gamestate.GameState;
 import risiko.gamestate.State;
-import risiko.gamestate.stateFactory;
 import risiko.gamestate.statePackage;
 
 public class GameMonitor {
@@ -126,6 +125,7 @@ public class GameMonitor {
 	 * Executes the Actions provided in the InputStream and writes the new Game
 	 * State to the provided OutputStream.
 	 * 
+	 * @deprecated use parseAndHandle instead
 	 * @param in
 	 * @return number of successfully read Actions
 	 * @throws IOException
@@ -161,6 +161,7 @@ public class GameMonitor {
 	 * 
 	 * The Board can only be set before the game has started.
 	 * 
+	 * @deprecated use parseAndHandle instead to read stuff from an input stream
 	 * @param in
 	 * @throws IOException
 	 */
@@ -184,6 +185,7 @@ public class GameMonitor {
 	/**
 	 * Reads the current state of this Risiko game from a given InputStream.
 	 * 
+	 * @deprecated use parseAndHandle instead
 	 * @param in
 	 * @throws IOException
 	 */
@@ -194,8 +196,9 @@ public class GameMonitor {
 		inputResource.unload();
 	}
 
-	public void parseAndHandle(InputStream in) throws IOException {
+	public List<EObject> parseAndHandle(InputStream in) throws IOException {
 		inputResource.load(in, null);
+		LinkedList<EObject> result = new LinkedList<EObject> ();
 		while (!inputResource.getContents().isEmpty()) {
 			EObject o = inputResource.getContents().get(0);
 			if (o instanceof Board) {
@@ -205,6 +208,19 @@ public class GameMonitor {
 			} else if (o instanceof State) {
 				this.setState((State) o);
 			}
+			result.add(o);
+		}
+		inputResource.unload();
+		return result;
+	}
+	
+	public void serialize(EObject in, OutputStream out){
+		inputResource.getContents().add(in);
+		try {
+			inputResource.save(out, null);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 		inputResource.unload();
 	}
@@ -225,6 +241,7 @@ public class GameMonitor {
 	}
 
 	public void setState(State state) {
+		//XXX validation commented out for debugging
 		//validate(state);
 		this.state = state;
 		stateResource.getContents().clear();
